@@ -1,0 +1,36 @@
+<configuration>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <fieldNames>
+                <timestamp>time</timestamp>
+                <level>loglevel</level>
+                <logger>class_name</logger>
+                <message>msg</message>
+                <thread>thread</thread>
+                <version>[ignore]</version>
+                <levelValue>[ignore]</levelValue>
+                <stackTrace>stacktrace</stackTrace>
+            </fieldNames>
+            <customFields>{"service_name":"qualicharge-integration"}</customFields>
+            <timestampPattern>yyyy-MM-dd HH:mm:ss.SSS</timestampPattern>
+            <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+                <maxDepthPerThrowable>30</maxDepthPerThrowable>
+                <maxLength>4096</maxLength>
+                <shortenedClassNameLength>40</shortenedClassNameLength>
+                <rootCauseFirst>true</rootCauseFirst>
+                <inlineHash>true</inlineHash>
+                <lineSeparator>UNIX</lineSeparator>
+            </throwableConverter>
+            <includeContext>true</includeContext>
+            <includeMdc>true</includeMdc>
+            <includeCallerData>true</includeCallerData>
+        </encoder>
+    </appender>
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+    <logger name="com.rabbitmq" level="INFO"/>
+    <logger name="io.netty" level="INFO"/>
+    <logger name="org.apache.kafka" level="WARN"/>
+    <logger name="com.mongodb" level="WARN"/>
+</configuration>

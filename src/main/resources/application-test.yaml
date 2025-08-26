@@ -1,0 +1,62 @@
+ktor:
+  environment: "$ENVIRONMENT:dev"
+  development: "$IS_DEVELOPMENT:false"
+  openapi: "$OPENAPI_ENABLED:false"
+  application:
+    modules:
+      - com.chargepoint.qualichargeIntegration.ApplicationKt.module
+  deployment:
+    port: "$APPLICATION_PORT:8090"
+  job-executor:
+    executor: "jobrunr"
+    is-worker: "$IS_JOB_EXECUTER_WORKER:true"
+    use-dashboard: "$USE_JOBRUNR_DASHBOARD:true"
+    port: "$JOBRUNR_DASHBOARD_PORT:8091"
+  data-push:
+    is-worker: "$IS_DATA_PUSH_WORKER:true"
+    use-kafka: "$DATA_PUSH_USE_KAFKA:true"
+    use-rabbitmq: "$DATA_PUSH_USE_RABBITMQ:true"
+  mongodb:
+    migration-run: "true"
+    uri: "$MONGODB_URI:mongodb://root-dev:SZYLUVJEvyUxEEE@localhost:27031/?authSource=admin&readPreference=primary&directConnection=true"
+    database: "qualicharge-integration"
+  mysql:
+    uri: "$MYSQL_URI:jdbc:mysql://localhost:3311/qualicharge"
+    username: "qualicharge_user"
+    password: "guv6cDugCPRzG7T"
+  valkey:
+    host: "$VALKEY_HOST:localhost"
+    port: "$VALKEY_PORT:6386"
+    auth-token: "$REDIS_AUTH_TOKEN:htb"
+    use-tls: "$VALKEY_USE_TLS:false"
+    iam-token-endpoint: "$?IAM_TOKEN_ENDPOINT"
+  redis:
+    host: "$REDIS_HOST:localhost"
+    port: "$REDIS_PORT:6386"
+    auth-token: "$REDIS_AUTH_TOKEN:htb"
+    use-tls: "$REDIS_USE_TLS:false"
+    iam-token-endpoint: "$?IAM_TOKEN_ENDPOINT"
+  kafka:
+    bootstrap-servers: "$KAFKA_BOOTSTRAP_SERVERS:localhost:29061"
+    consumer-group: "qualicharge-integration"
+    security-protocol: "$KAFKA_SECURITY_PROTOCOL:PLAINTEXT"
+    sasl-mechanism: "$?KAFKA_PROPERTIES_SASL_MECHANISM"
+    sasl-oauthbearer-token-endpoint-url: "$?KAFKA_PROPERTIES_SASL_OAUTHBEARER_TOKEN_ENDPOINT_URL"
+    sasl-login-callback-handler-class: "$?KAFKA_PROPERTIES_SASL_LOGIN_CALLBACK_HANDLER_CLASS"
+    sasl-jaas-config: "$?KAFKA_PROPERTIES_SASL_JAAS_CONFIG"
+
+  sentry:
+    dsn: "$SENTRY_DSN:"
+    release: "$SENTRY_RELEASE:local"
+  rabbitmq:
+    host: "$RABBITMQ_HOST:localhost"
+    password: "$RABBITMQ_PASSWORD:qualicharge"
+    username: "qualicharge"
+    port: "$RABBITMQ_PORT:5676"
+    virtual-host: "qualicharge-integration"
+    listener:
+      direct.acknowledge-mode: manual
+external:
+  service:
+    qualicharge:
+      url: "$QUALICHARGE_URL:http://localhost:54583"

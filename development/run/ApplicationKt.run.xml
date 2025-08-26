@@ -1,0 +1,30 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="ApplicationKt" type="KtorApplicationConfigurationType" factoryName="Ktor" nameIsGenerated="true">
+    <envs>
+      <env name="ENVIRONMENT" value="dev" />
+      <env name="IS_DEVELOPMENT" value="true" />
+      <env name="OPENAPI_ENABLED" value="true" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="com.chargepoint.qualichargeIntegration.ApplicationKt" />
+    <module name="qualicharge-integration.main" />
+    <option name="VM_PARAMETERS" value=" -XX:ActiveProcessorCount=1 -Xmx200m" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="com.chargepoint.qualichargeIntegration.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <option name="alternativeJrePath" />
+    <option name="alternativeJrePathEnabled" value="false" />
+    <option name="includeProvidedScope" value="false" />
+    <option name="mainClass" value="com.chargepoint.qualichargeIntegration.ApplicationKt" />
+    <option name="passParentEnvs" value="true" />
+    <option name="programParameters" value="" />
+    <option name="shortenCommandLine" />
+    <option name="vmParameters" value=" -XX:ActiveProcessorCount=1 -Xmx200m" />
+    <option name="workingDirectory" value="$PROJECT_DIR$" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
