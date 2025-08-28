@@ -1,62 +1,116 @@
-ktor:
-  environment: "$ENVIRONMENT:dev"
-  development: "$IS_DEVELOPMENT:false"
-  openapi: "$OPENAPI_ENABLED:false"
+spring:
   application:
-    modules:
-      - com.chargepoint.carobon.relay.ApplicationKt.module
-  deployment:
-    port: "$APPLICATION_PORT:8090"
-  job-executor:
-    executor: "jobrunr"
-    is-worker: "$IS_JOB_EXECUTER_WORKER:true"
-    use-dashboard: "$USE_JOBRUNR_DASHBOARD:true"
-    port: "$JOBRUNR_DASHBOARD_PORT:8091"
-  data-push:
-    is-worker: "$IS_DATA_PUSH_WORKER:true"
-    use-kafka: "$DATA_PUSH_USE_KAFKA:true"
-    use-rabbitmq: "$DATA_PUSH_USE_RABBITMQ:true"
-  # mongodb:
-  #   migration-run: "true"
-  #   uri: "$MONGODB_URI:mongodb://root-dev:SZYLUVJEvyUxEEE@localhost:27031/?authSource=admin&readPreference=primary&directConnection=true"
-  #   database: "qualicharge-integration"
-  mysql:
-    uri: "$MYSQL_URI:jdbc:mysql://localhost:3311/qualicharge"
-    username: "qualicharge_user"
-    password: "guv6cDugCPRzG7T"
-  valkey:
-    host: "$VALKEY_HOST:localhost"
-    port: "$VALKEY_PORT:6386"
-    auth-token: "$REDIS_AUTH_TOKEN:htb"
-    use-tls: "$VALKEY_USE_TLS:false"
-    iam-token-endpoint: "$?IAM_TOKEN_ENDPOINT"
-  redis:
-    host: "$REDIS_HOST:localhost"
-    port: "$REDIS_PORT:6386"
-    auth-token: "$REDIS_AUTH_TOKEN:htb"
-    use-tls: "$REDIS_USE_TLS:false"
-    iam-token-endpoint: "$?IAM_TOKEN_ENDPOINT"
-  kafka:
-    bootstrap-servers: "$KAFKA_BOOTSTRAP_SERVERS:localhost:29061"
-    consumer-group: "qualicharge-integration"
-    security-protocol: "$KAFKA_SECURITY_PROTOCOL:PLAINTEXT"
-    sasl-mechanism: "$?KAFKA_PROPERTIES_SASL_MECHANISM"
-    sasl-oauthbearer-token-endpoint-url: "$?KAFKA_PROPERTIES_SASL_OAUTHBEARER_TOKEN_ENDPOINT_URL"
-    sasl-login-callback-handler-class: "$?KAFKA_PROPERTIES_SASL_LOGIN_CALLBACK_HANDLER_CLASS"
-    sasl-jaas-config: "$?KAFKA_PROPERTIES_SASL_JAAS_CONFIG"
+    name: carbon-relay-integration
+  jpa:
+    hibernate:
+      ddl-auto: none   # disable auto schema updates
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
-  sentry:
-    dsn: "$SENTRY_DSN:"
-    release: "$SENTRY_RELEASE:local"
-  rabbitmq:
-    host: "$RABBITMQ_HOST:localhost"
-    password: "$RABBITMQ_PASSWORD:qualicharge"
-    username: "qualicharge"
-    port: "$RABBITMQ_PORT:5676"
-    virtual-host: "qualicharge-integration"
-    listener:
-      direct.acknowledge-mode: manual
+  # JDBC datasource (needed for Liquibase)
+  datasource:
+    url: jdbc:postgresql://localhost:3311/carbon_relay
+    username: carbon_relay_user
+    password: Bql796q98CKdUrF
+    driver-class-name: org.postgresql.Driver
+
+  # R2DBC datasource (used by WebFlux repositories)
+  r2dbc:
+    url: r2dbc:postgresql://localhost:3311/carbon_relay
+    username: carbon_relay_user
+    password: Bql796q98CKdUrF
+
+  kafka:
+    bootstrap-servers: localhost:29061
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    properties:
+      security.protocol: PLAINTEXT
+
+
+  #  # Initialize schema (optional, if you want schema.sql for dev)
+  #  sql:
+  #    init:
+  #      mode: always
+  #      schema-locations: classpath:schema.sql
+
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.xml
+
+databaseChangeLog:
+  - include:
+      file: db/changelog/db.changelog-master.xml
+
+server:
+  port: ${APPLICATION_PORT:8090}
+
+environment: ${ENVIRONMENT:dev}
+development: ${IS_DEVELOPMENT:false}
+openapi-enabled: ${OPENAPI_ENABLED:false}
+
+job-executor:
+  executor: jobrunr
+  is-worker: ${IS_JOB_EXECUTER_WORKER:true}
+  use-dashboard: ${USE_JOBRUNR_DASHBOARD:true}
+  port: ${JOBRUNR_DASHBOARD_PORT:8091}
+
+data-push:
+  is-worker: ${IS_DATA_PUSH_WORKER:true}
+  use-kafka: ${DATA_PUSH_USE_KAFKA:true}
+  use-rabbitmq: ${DATA_PUSH_USE_RABBITMQ:true}
+
+logging:
+  level:
+    org.springframework.r2dbc.connection: DEBUG
+    io.r2dbc.postgresql: INFO
+
+valkey:
+  host: ${VALKEY_HOST:localhost}
+  port: ${VALKEY_PORT:6386}
+  auth-token: ${REDIS_AUTH_TOKEN:htb}
+  use-tls: ${VALKEY_USE_TLS:false}
+  iam-token-endpoint: ${IAM_TOKEN_ENDPOINT:}
+
+redis:
+  host: ${REDIS_HOST:localhost}
+  port: ${REDIS_PORT:6386}
+  auth-token: ${REDIS_AUTH_TOKEN:htb}
+  use-tls: ${REDIS_USE_TLS:false}
+  iam-token-endpoint: ${IAM_TOKEN_ENDPOINT:}
+
+#kafka:
+#  bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:29061}
+#  consumer-group: qualicharge-integration
+#  security-protocol: ${KAFKA_SECURITY_PROTOCOL:PLAINTEXT}
+#  sasl:
+#    mechanism: ${KAFKA_PROPERTIES_SASL_MECHANISM:}
+#    oauthbearer-token-endpoint-url: ${KAFKA_PROPERTIES_SASL_OAUTHBEARER_TOKEN_ENDPOINT_URL:}
+#    login-callback-handler-class: ${KAFKA_PROPERTIES_SASL_LOGIN_CALLBACK_HANDLER_CLASS:}
+#    jaas-config: ${KAFKA_PROPERTIES_SASL_JAAS_CONFIG:}
+
+sentry:
+  dsn: ${SENTRY_DSN:}
+  release: ${SENTRY_RELEASE:local}
+
+rabbitmq:
+  host: ${RABBITMQ_HOST:localhost}
+  port: ${RABBITMQ_PORT:5676}
+  username: carbon-relay
+  password: ${RABBITMQ_PASSWORD:carbon-relay}
+  virtual-host: carbon-relay
+  listener:
+    direct:
+      acknowledge-mode: manual
+
 external:
   service:
     qualicharge:
-      url: "$QUALICHARGE_URL:http://localhost:54583"
+      url: ${QUALICHARGE_URL:http://localhost:54583}

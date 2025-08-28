@@ -1,5 +1,5 @@
 -- Create the database (run as a superuser or with sufficient privileges)
-CREATE DATABASE qualicharge
+CREATE DATABASE carbon_relay
     WITH
     ENCODING = 'UTF8'
     LC_COLLATE = 'en_US.utf8'
@@ -11,17 +11,17 @@ DO
 $do$
 BEGIN
    IF NOT EXISTS (
-      SELECT FROM pg_catalog.pg_roles WHERE rolname = 'qualicharge_user'
+      SELECT FROM pg_catalog.pg_roles WHERE rolname = 'carbon_relay_user'
    ) THEN
-      CREATE ROLE qualicharge_user LOGIN PASSWORD 'guv6cDugCPRzG7T';
+      CREATE ROLE carbon_relay_user LOGIN PASSWORD 'Bql796q98CKdUrF';
    END IF;
 END
 $do$;
 
-GRANT ALL PRIVILEGES ON DATABASE qualicharge TO qualicharge_user;
+GRANT ALL PRIVILEGES ON DATABASE carbon_relay TO carbon_relay_user;
 
--- Connect to the qualicharge database before running the following:
---\c qualicharge
+-- Connect to the carbon_relay database before running the following:
+--\c carbon_relay
 
 -- Create example table
 --CREATE TABLE IF NOT EXISTS locks (

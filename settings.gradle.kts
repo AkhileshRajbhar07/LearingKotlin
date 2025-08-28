@@ -1,1 +1,1 @@
-rootProject.name = "qualicharge"
+rootProject.name = "carbon-relay"

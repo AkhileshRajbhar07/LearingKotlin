@@ -11,7 +11,7 @@
                 <levelValue>[ignore]</levelValue>
                 <stackTrace>stacktrace</stackTrace>
             </fieldNames>
-            <customFields>{"service_name":"qualicharge-integration"}</customFields>
+            <customFields>{"service_name":"carbon-relay-integration"}</customFields>
             <timestampPattern>yyyy-MM-dd HH:mm:ss.SSS</timestampPattern>
             <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
                 <maxDepthPerThrowable>30</maxDepthPerThrowable>

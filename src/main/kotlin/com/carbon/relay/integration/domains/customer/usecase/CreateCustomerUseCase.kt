@@ -1,6 +1,5 @@
 package com.carbon.relay.integration.domains.customer.usecase
 
-//import com.qualicharge.integration.domains.customer.infrastructure.repositories.CustomerMySQLRepository
 import com.carbon.relay.integration.domains.customer.infrastructure.repositories.CustomerRepository
 import com.carbon.relay.integration.domains.customer.models.Customer
 import com.carbon.relay.integration.domains.customer.util.CustomerValidation

@@ -1,5 +1,6 @@
 package com.carbon.relay.integration.domains.customer.models
 
+import java.time.LocalDate
 import kotlinx.serialization.Serializable
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
@@ -11,5 +12,5 @@ data class Customer(
     val id: Long? = null,
     val fname: String?,
     val lname: String?,
-    val dob: String? // ISO format (yyyy-MM-dd)
+    val dob: LocalDate? // ISO format (yyyy-MM-dd)
 )

@@ -22,7 +22,7 @@ class CustomerKafkaConsumer @Autowired constructor(
 ) {
     private val logger = LoggerFactory.getLogger(CustomerKafkaConsumer::class.java)
 
-    @KafkaListener(topics = ["customer"], groupId = "qualicharge-integration")
+    @KafkaListener(topics = ["customer"], groupId = "carbon-relay-integration")
     fun listen(record: ConsumerRecord<String, String>) = runBlocking {
         logger.info("Received customer message: ${record.value()}")
         // Step 1: Store message in Redis
@@ -53,12 +53,14 @@ class CustomerKafkaConsumer @Autowired constructor(
         if (allowed) {
             // Step 3: Call third-party API
             logger.info("Rate limit check passed. Calling third-party API.")
+
             val response = webClient.put()
                 .uri("https://postman-echo.com/put")
                 .bodyValue(record.value())
                 .retrieve()
                 .toBodilessEntity()
                 .block()
+
             logger.info("PUT to https://postman-echo.com/put responded with status: ${response?.statusCode}")
             // Step 4: Send message to RabbitMQ
             logger.debug("Sending message to RabbitMQ queue after successful third-party API call.")

@@ -2,6 +2,7 @@ package com.carbon.relay.integration.domains.customer.infrastructure.entity
 
 import org.springframework.data.relational.core.mapping.Table
 import org.springframework.data.annotation.Id
+import java.time.LocalDate
 
 @Table("customer")
 data class CustomerEntity(
@@ -9,7 +10,5 @@ data class CustomerEntity(
     val id: String? = null,
     val fName: String?,
     val lName: String?,
-    val dob: String?
+    val dob: LocalDate?
 )
-
-

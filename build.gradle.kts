@@ -3,7 +3,7 @@ plugins {
 	kotlin("plugin.spring") version "2.0.21"
 	id("org.springframework.boot") version "3.5.4"
 	id("io.spring.dependency-management") version "1.1.7"
-	id("org.liquibase.gradle") version "2.2.0"
+//	id("org.liquibase.gradle") version "2.2.0"
 }
 
 group = "com.carbon.relay.integration"
@@ -43,6 +43,7 @@ dependencies {
 	implementation("org.springframework.kafka:spring-kafka:3.2.4")
 //	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 	implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
+	implementation("org.springframework.boot:spring-boot-starter-jdbc:$springBootVersion")
 
 
 
@@ -57,6 +58,7 @@ dependencies {
 	//postgresql
 	implementation("org.postgresql:r2dbc-postgresql")
 	implementation("com.zaxxer:HikariCP:7.0.0")
+	implementation("org.postgresql:postgresql:42.7.7")  // Move from runtimeOnly to implementation
 
 	// JobRuner
 	implementation("org.jobrunr:jobrunr:7.5.2")
@@ -75,10 +77,10 @@ dependencies {
 
 	// Liquibase
 	implementation("org.liquibase:liquibase-core:4.23.2")
-	liquibaseRuntime("org.liquibase:liquibase-core:4.23.2")
-	liquibaseRuntime("org.postgresql:postgresql:42.7.7")
-	liquibaseRuntime("info.picocli:picocli:4.7.4")
-	runtimeOnly("org.postgresql:postgresql")
+	//liquibaseRuntime("org.liquibase:liquibase-core:4.23.2")
+	//liquibaseRuntime("org.postgresql:postgresql:42.7.7")
+	//liquibaseRuntime("info.picocli:picocli:4.7.4")
+	//runtimeOnly("org.postgresql:postgresql")
 
 	//bucket4j
 	implementation("com.bucket4j:bucket4j_jdk17-core:8.15.0")
@@ -87,18 +89,6 @@ dependencies {
 
 }
 
-liquibase {
-	activities.register("main") {
-		this.arguments = mapOf(
-			"changelogFile" to "src/main/resources/db/changelog/db.changelog-master.xml",
-			"url" to "jdbc:postgresql://localhost:3311/qualicharge",
-			"username" to "qualicharge_user",
-			"password" to "Bql796q98CKdUrF",
-			"driver" to "org.postgresql.Driver"
-		)
-	}
-	runList = "main"
-}
 
 kotlin {
 	compilerOptions {
