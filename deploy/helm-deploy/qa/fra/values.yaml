@@ -1,0 +1,111 @@
+---
+carbon-relay-request-handler:
+  # application name override
+  nameOverride: "carbon-relay-request-handler"
+  fullnameOverride: "carbon-relay-request-handler"
+  replicaCount: 1
+  revisionHistoryLimit: 2
+  autoscaling:
+    enabled: false
+
+  # application environment
+  environment: "prod"
+  # region ore, mon, fra
+  region: fra
+
+  # container image tag and ecr repository
+  image:
+    repository: "022521842517.dkr.ecr.eu-central-1.amazonaws.com/carbon-relay"
+    pullPolicy: IfNotPresent
+    tag: "v0.3.0"
+
+  # application container port
+  containerPort: 8080
+
+  # application service
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 8080
+
+  # enable if your application requires a loadbalancer
+  # enable internet-facing if your application requires public facing url.
+  internetfacing: "true"
+  ingress:
+    enabled: true
+    hosts:
+      - host: carbon-relay-eu.ev-chargepoint.com
+        paths:
+          - path: /
+            pathType: Prefix
+
+  # https://kubernetes.io/docs/concepts/configuration/configmap/
+  configmap:
+    enabled: true
+    mountpath: /etc/config
+  data:
+    AWS_REGION: "eu-central-1"
+
+#  secrets:
+#    enabled: true
+#    region: eu-central-1
+#    data:
+#      dataFrom:
+#        - extract:
+#            key: cp-qa-fra-nos-roaming-ocpi-interface
+#    mountpath: /etc/base_constant
+
+  # environment vars
+  env:
+    - name: ENVIRONMENT
+      value: "QA"
+    - name: LOCATION_SERVICE_URL
+      value: "http://static-data-worker.roaming-location.svc.cluster.local"
+    - name: JOB_WORKER_ENABLED
+      value: "false"
+    - name: SENTRY_RELEASE
+      value: "main.17.b669f5df15aa6485e9085bf84adef6962331017e"
+#    - name: REDIS_HOST
+#      value: "master.cp-qa-fra-nos-k8s-carbon-relay.1oaqu6.euc1.cache.amazonaws.com"
+    - name: REDIS_PORT
+      value: "6379"
+    - name: RABBITMQ_HOST
+      value: "cp-qa-fra-nos-rmq.ev-chargepoint.com"
+    - name: RABBITMQ_USER
+      value: "carbon-relay"
+    - name: RABBITMQ_PORT
+      value: "5672"
+    - name: RABBITMQ_VHOST
+      value: "carbon-relay"
+#    - name: BASE_URL
+#      value: "https://carbon-relay-eu.ev-chargepoint.com"
+  resources:
+    limits:
+      cpu: 2
+      memory: 2Gi
+    requests:
+      cpu: 1
+      memory: 1.5Gi
+
+  livenessProbe:
+    httpGet:
+      path: /actuator/health/liveness
+      port: 5051
+    initialDelaySeconds: 50
+    periodSeconds: 125
+    failureThreshold: 1
+
+  readinessProbe:
+    httpGet:
+      path: /actuator/health/readiness
+      port: 5051
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    failureThreshold: 1
+
+  metrics:
+    enabled: true
+    path: /actuator/prometheus
+    port: 5051
+    name: metrics
+    protocol: TCP

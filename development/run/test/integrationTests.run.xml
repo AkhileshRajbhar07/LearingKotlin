@@ -1,9 +1,9 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="integrationTests" type="JUnit" factoryName="JUnit">
-    <module name="qualicharge-integration.test" />
+    <module name="carbon.relay-integration.test" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="com.chargepoint.qualichargeIntegration.spring.configs.*" />
+        <option name="PATTERN" value="com.chargepoint.carbon.relay.spring.configs.*" />
         <option name="ENABLED" value="true" />
         <option name="INCLUDE" value="false" />
       </pattern>

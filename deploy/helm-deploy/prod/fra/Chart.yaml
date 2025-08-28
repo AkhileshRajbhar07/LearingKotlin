@@ -1,0 +1,10 @@
+---
+apiVersion: v2
+name: carbon-relay
+type: application
+version: 1.0.0
+dependencies:
+  - name: helm-deploy
+    version: 1.1.85
+    repository: https://artifactory.sw.chargepoint.com/artifactory/base-deploy-chart-helm
+    alias: carbon-relay-request-handler

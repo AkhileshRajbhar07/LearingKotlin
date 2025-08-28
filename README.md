@@ -1,4 +1,4 @@
-# Qualicharge Integration
+# Carbon Relay Integration
 
 ## Getting Started
 
@@ -11,11 +11,11 @@ This project uses Docker Compose for local development and Gradle for building a
 ### 1. Start Docker Containers
 - **Linux/macOS:**
   ```sh
-  docker compose -p qualicharge up -d
+  docker compose -p carbonrelay up -d
   ```
 - **Windows (PowerShell):**
   ```powershell
-  docker compose -p qualicharge up -d
+  docker compose -p carbonrelay up -d
   ```
 
 ### 2. MySQL Initialization
@@ -39,11 +39,11 @@ If you are using Podman instead of Docker, you can use the following command:
 
 - **Linux/macOS:**
   ```sh
-  podman-compose -p qualicharge up -d
+  podman-compose -p carbonrelay up -d
   ```
 - **Windows (PowerShell):**
   ```powershell
-  podman-compose -p qualicharge up -d
+  podman-compose -p carbonrelay up -d
   ```
 
 The rest of the setup steps (MySQL initialization) remain the same.

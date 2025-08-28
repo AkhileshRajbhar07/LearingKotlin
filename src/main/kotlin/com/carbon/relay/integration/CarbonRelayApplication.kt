@@ -6,8 +6,8 @@ import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories
 
 @EnableR2dbcRepositories
 @SpringBootApplication
-class CarbonRelayIntegrationApplication
+class CarbonRelayIntegrationsApplication
 
 fun main(args: Array<String>) {
-	runApplication<CarbonRelayIntegrationApplication>(*args)
+	runApplication<CarbonRelayIntegrationsApplication>(*args)
 }

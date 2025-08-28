@@ -21,12 +21,12 @@ $do$;
 GRANT ALL PRIVILEGES ON DATABASE qualicharge TO qualicharge_user;
 
 -- Connect to the qualicharge database before running the following:
-\c qualicharge
+--\c qualicharge
 
 -- Create example table
-CREATE TABLE IF NOT EXISTS locks (
-    id BIGSERIAL PRIMARY KEY,
-    lock_key VARCHAR(255) NOT NULL UNIQUE,
-    lock_value VARCHAR(255) NOT NULL,
-    expiry_time TIMESTAMPTZ NOT NULL
-);
+--CREATE TABLE IF NOT EXISTS locks (
+--    id BIGSERIAL PRIMARY KEY,
+--    lock_key VARCHAR(255) NOT NULL UNIQUE,
+--    lock_value VARCHAR(255) NOT NULL,
+--    expiry_time TIMESTAMPTZ NOT NULL
+--);

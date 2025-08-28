@@ -1,35 +1,6 @@
 services:
-  mongodb:
-    image: mongo:7.0
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: "root-dev"
-      MONGO_INITDB_ROOT_PASSWORD: "SZYLUVJEvyUxEEE"
-    ports:
-      - "27031:27017"
-    volumes:
-      - mongodb-qualicharge:/data/db
-      # Mount to a temp path
-      - ./docker/mongodb/security-keyfile.key:/tmp/security-keyfile.key:ro
-    command: >
-      bash -c "cp /tmp/security-keyfile.key /data/security-keyfile.key &&
-               chmod 400 /data/security-keyfile.key &&
-               mongod --replSet qualicharge --bind_ip_all --keyFile /data/security-keyfile.key"
-    healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
-
-  mongoinit:
-    image: mongo:7.0
-    restart: "no"
-    depends_on:
-      mongodb:
-        condition: service_healthy
-    volumes:
-      - ./docker/mongodb/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh:ro
-      - ./docker/mongodb/security-keyfile.key:/security-keyfile.key:ro
-    entrypoint: ["bash", "-c", "sh ./docker-entrypoint-initdb.d/init-db.sh"]
-
   redis:
-    image: redis:7
+    image: redis:8.2.1
     ports:
       - "6386:6379"
     networks:
@@ -42,50 +13,38 @@ services:
       - "15676:15672"
     environment:
       RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
-      RABBITMQ_DEFAULT_USER: "qualicharge"
-      RABBITMQ_DEFAULT_PASS: "qualicharge"
-      RABBITMQ_DEFAULT_VHOST: "qualicharge-integration"
+      RABBITMQ_DEFAULT_USER: "carbon-relay"
+      RABBITMQ_DEFAULT_PASS: "carbon-relay"
+      RABBITMQ_DEFAULT_VHOST: "carbon-relay"
     networks:
       - default
 
-#  mysql:
-#    image: mysql:8.0
-#    environment:
-#      - "MYSQL_ROOT_PASSWORD=Bql796q98CKdUrF"
-#      - "MYSQL_DATABASE: qualicharge"
-#      - "MYSQL_USER: qualicharge_user"
-#      - "MYSQL_PASSWORD: guv6cDugCPRzG7T"
-#    ports:
-#      - "3311:3306"
-#    volumes:
-#      - mysqldb-qualicharge:/var/lib/mysql
-#      - ./docker/mysql:/docker-entrypoint-initdb.d
   postgres:
-    image: postgres:15-alpine
+    image: postgres:17-alpine
     environment:
       - POSTGRES_PASSWORD=Bql796q98CKdUrF
-      - POSTGRES_DB=qualicharge
-      - POSTGRES_USER=qualicharge_user
-      - TZ=Asia/Kolkata
-      - PGTZ=Asia/Kolkata
+      - POSTGRES_DB=carbon_relay
+      - POSTGRES_USER=carbon_relay_user
+#      - TZ=Asia/Kolkata
+#      - PGTZ=Asia/Kolkata
     ports:
       - "3311:5432"
     volumes:
-      - postgres-db-qualicharge:/var/lib/postgresql/data
+      - postgres-db-carbon-relay:/var/lib/postgresql/data
       - ./docker/postgres:/docker-entrypoint-initdb.d
 
-  kafka-qualicharge:
+  kafka-carbon-relay:
     image: confluentinc/cp-kafka:7.9.0
     ports:
       - "29061:29061"
     environment:
-      CLUSTER_ID: "qualicharge-dev-cluster"
+      CLUSTER_ID: "carbon-relay-dev-cluster"
       KAFKA_NODE_ID: 1
       KAFKA_PROCESS_ROLES: broker,controller
       KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:29061
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-qualicharge:9092,EXTERNAL://localhost:29061
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-carbon-relay:9092,EXTERNAL://localhost:29061
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
-      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka-qualicharge:9093
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka-carbon-relay:9093
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
@@ -95,7 +54,7 @@ services:
       KAFKA_DELETE_TOPIC_ENABLE: "true"
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
     volumes:
-      - kafka-data-qualicharge:/var/lib/kafka/data
+      - kafka-data-carbon-relay:/var/lib/kafka/data
     healthcheck:
       test: kafka-topics --bootstrap-server localhost:9092 --list
       interval: 3s
@@ -104,15 +63,15 @@ services:
     networks:
       - default
 
-  kafka-qualicharge-rest:
+  kafka-carbon-relay-rest:
     image: confluentinc/cp-kafka-rest:7.9.0-1-ubi8
-    hostname: kafka-qualicharge-rest
+    hostname: kafka-carbon-relay-rest
     depends_on:
-      kafka-qualicharge:
+      kafka-carbon-relay:
         condition: service_healthy
     environment:
-      KAFKA_REST_HOST_NAME: "kafka-qualicharge-rest"
-      KAFKA_REST_BOOTSTRAP_SERVERS: "kafka-qualicharge:9092"
+      KAFKA_REST_HOST_NAME: "kafka-carbon-relay-rest"
+      KAFKA_REST_BOOTSTRAP_SERVERS: "kafka-carbon-relay:9092"
       KAFKA_REST_AUTHENTICATION_METHOD: BASIC
       KAFKA_REST_AUTHENTICATION_REALM: KafkaRest
       KAFKA_REST_AUTHENTICATION_ROLES: rest
@@ -128,16 +87,14 @@ services:
     ports:
       - "9026:8080"
     environment:
-      KAFKA_CLUSTERS_0_NAME: "qualicharge-dev"
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka-qualicharge:9092
+      KAFKA_CLUSTERS_0_NAME: "carbon-relay-dev"
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka-carbon-relay:9092
       KAFKA_CLUSTERS_0_READONLY: "false"
       CONTROL_CENTER_REPLICATION_FACTOR: 1
     depends_on:
-      kafka-qualicharge:
+      kafka-carbon-relay:
         condition: service_healthy
 
 volumes:
-  mongodb-qualicharge:
-#  mysqldb-qualicharge:
-  kafka-data-qualicharge:
-  postgres-db-qualicharge:
+  kafka-data-carbon-relay:
+  postgres-db-carbon-relay:

@@ -4,7 +4,7 @@ ktor:
   openapi: "$OPENAPI_ENABLED:false"
   application:
     modules:
-      - com.chargepoint.qualichargeIntegration.ApplicationKt.module
+      - com.chargepoint.carobon.relay.ApplicationKt.module
   deployment:
     port: "$APPLICATION_PORT:8090"
   job-executor:
