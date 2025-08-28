@@ -1,6 +1,5 @@
-package com.carbon.relay.integration.spring.config
+package com.carbon.relay.integration.config
 
-import com.carbon.relay.integration.config.RedisProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration

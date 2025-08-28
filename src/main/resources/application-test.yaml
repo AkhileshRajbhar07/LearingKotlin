@@ -16,10 +16,10 @@ ktor:
     is-worker: "$IS_DATA_PUSH_WORKER:true"
     use-kafka: "$DATA_PUSH_USE_KAFKA:true"
     use-rabbitmq: "$DATA_PUSH_USE_RABBITMQ:true"
-  mongodb:
-    migration-run: "true"
-    uri: "$MONGODB_URI:mongodb://root-dev:SZYLUVJEvyUxEEE@localhost:27031/?authSource=admin&readPreference=primary&directConnection=true"
-    database: "qualicharge-integration"
+  # mongodb:
+  #   migration-run: "true"
+  #   uri: "$MONGODB_URI:mongodb://root-dev:SZYLUVJEvyUxEEE@localhost:27031/?authSource=admin&readPreference=primary&directConnection=true"
+  #   database: "qualicharge-integration"
   mysql:
     uri: "$MYSQL_URI:jdbc:mysql://localhost:3311/qualicharge"
     username: "qualicharge_user"

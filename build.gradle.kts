@@ -1,5 +1,3 @@
-import org.gradle.kotlin.dsl.main
-
 plugins {
 	kotlin("jvm") version "2.0.21"
 	kotlin("plugin.spring") version "2.0.21"
@@ -8,9 +6,9 @@ plugins {
 	id("org.liquibase.gradle") version "2.2.0"
 }
 
-group = "com.qualicharge.integration"
+group = "com.carbon.relay.integration"
 version = "0.5.0"
-description = "Qualicharge Integration"
+description = "Carbon Relay Integration"
 
 java {
 	toolchain {
@@ -78,18 +76,15 @@ dependencies {
 	// Liquibase
 	implementation("org.liquibase:liquibase-core:4.23.2")
 	liquibaseRuntime("org.liquibase:liquibase-core:4.23.2")
-	liquibaseRuntime("org.postgresql:postgresql:42.6.0")
+	liquibaseRuntime("org.postgresql:postgresql:42.7.7")
 	liquibaseRuntime("info.picocli:picocli:4.7.4")
 	runtimeOnly("org.postgresql:postgresql")
 
 	//bucket4j
-//	implementation("com.bucket4j:bucket4j-core:8.9.0")
-//	implementation("com.bucket4j:bucket4j-redis:8.9.0")
-//	implementation("io.lettuce.core:lettuce-core:6.2.6")
 	implementation("com.bucket4j:bucket4j_jdk17-core:8.15.0")
 	implementation("com.bucket4j:bucket4j_jdk17-redis-common:8.15.0")
 	implementation("com.bucket4j:bucket4j_jdk17-lettuce:8.15.0")
-	implementation("io.lettuce.core:lettuce-core:6.5.2")
+
 }
 
 liquibase {

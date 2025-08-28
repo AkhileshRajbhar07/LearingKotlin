@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service
 
 @Service
 class CreateCustomerUseCase(
-//    val customerRepo: CustomerMySQLRepository
     private val customerRepository: CustomerRepository,
     private val kafkaTemplate: KafkaTemplate<String, String>
 ) {

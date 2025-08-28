@@ -1,6 +1,6 @@
 spring:
   application:
-    name: qualicharge-integration
+    name: carbon-relay-integration
   jpa:
     hibernate:
       ddl-auto: none   # disable auto schema updates

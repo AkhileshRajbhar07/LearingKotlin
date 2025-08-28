@@ -1,5 +1,7 @@
 package com.carbon.relay.integration.domains.customer.consumer
 
+import com.carbon.relay.integration.domains.customer.producer.CustomerRabbitProducer
+import com.carbon.relay.integration.domains.customer.util.RedisRateLimiterUtil
 import io.github.bucket4j.distributed.proxy.ProxyManager
 import kotlinx.coroutines.runBlocking
 import org.apache.kafka.clients.consumer.ConsumerRecord
@@ -15,15 +17,16 @@ import org.springframework.web.reactive.function.client.WebClient
 class CustomerKafkaConsumer @Autowired constructor(
     private val reactiveRedisTemplate: ReactiveRedisTemplate<String, String>,
     private val webClient: WebClient,
-    private val bucket4jProxyManager: ProxyManager<String>
+    private val bucket4jProxyManager: ProxyManager<String>,
+    private val customerRabbitProducer: CustomerRabbitProducer // Inject RabbitMQ producer
 ) {
     private val logger = LoggerFactory.getLogger(CustomerKafkaConsumer::class.java)
 
     @KafkaListener(topics = ["customer"], groupId = "qualicharge-integration")
     fun listen(record: ConsumerRecord<String, String>) = runBlocking {
         logger.info("Received customer message: ${record.value()}")
-        val maxRequests = 1L
-        val windowSeconds = 60L
+        // Step 1: Store message in Redis
+        logger.debug("Storing message in Redis with key 'customer:last-message'")
         // Store message in Redis reactively
         reactiveRedisTemplate.opsForValue()
             .set("customer:last-message", record.value())
@@ -31,6 +34,10 @@ class CustomerKafkaConsumer @Autowired constructor(
             .doOnError { e -> logger.error("Failed to store message in Redis", e) }
             .subscribe()
 
+        // Step 2: Distributed rate limiting with Bucket4j
+        logger.debug("Checking distributed rate limit using Bucket4j")
+        val maxRequests = 1L
+        val windowSeconds = 60L
         // Bucket4j distributed rate limiting
         val allowed = RedisRateLimiterUtil.storeAndRateLimitWithErrorHandling(
             reactiveRedisTemplate,
@@ -44,15 +51,21 @@ class CustomerKafkaConsumer @Autowired constructor(
         ).block() ?: false
 
         if (allowed) {
+            // Step 3: Call third-party API
+            logger.info("Rate limit check passed. Calling third-party API.")
             val response = webClient.put()
                 .uri("https://postman-echo.com/put")
                 .bodyValue(record.value())
                 .retrieve()
                 .toBodilessEntity()
                 .block()
-            logger.info("PUT to https://postman-echo.com/put responded with status: ${'$'}{response?.statusCode}")
+            logger.info("PUT to https://postman-echo.com/put responded with status: ${response?.statusCode}")
+            // Step 4: Send message to RabbitMQ
+            logger.debug("Sending message to RabbitMQ queue after successful third-party API call.")
+            customerRabbitProducer.sendToQueue(record.value())
+            logger.info("Message sent to RabbitMQ queue after third-party API call.")
         } else {
-            logger.warn("Rate limit exceeded: more than ${maxRequests}maxRequests requests in ${windowSeconds}windowSeconds seconds. Skipping external API call.")
+            logger.warn("Rate limit exceeded: more than $maxRequests requests in $windowSeconds seconds. Skipping external API call and RabbitMQ publish.")
         }
     }
 }

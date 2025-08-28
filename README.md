@@ -18,19 +18,7 @@ This project uses Docker Compose for local development and Gradle for building a
   docker compose -p qualicharge up -d
   ```
 
-### 2. MongoDB Keyfile Setup
-- **Linux/macOS:**
-  ```sh
-  openssl rand -base64 756 > ./docker/mongodb/security-keyfile.key
-  chmod 400 ./docker/mongodb/security-keyfile.key
-  ```
-- **Windows (PowerShell):**
-  ```powershell
-  openssl rand -base64 756 | Out-File -Encoding ASCII ./docker/mongodb/security-keyfile.key
-  icacls ./docker/mongodb/security-keyfile.key /inheritance:r /grant:r "$($env:USERNAME):(R)"
-  ```
-
-### 3. MySQL Initialization
+### 2. MySQL Initialization
 - **Linux/macOS:**
   ```sh
   mkdir -p ./docker/mysql
@@ -58,7 +46,7 @@ If you are using Podman instead of Docker, you can use the following command:
   podman-compose -p qualicharge up -d
   ```
 
-The rest of the setup steps (MongoDB keyfile and MySQL initialization) remain the same.
+The rest of the setup steps (MySQL initialization) remain the same.
 
 ---
 
@@ -98,5 +86,5 @@ The rest of the setup steps (MongoDB keyfile and MySQL initialization) remain th
 
 ## Notes
 - Ensure Docker or Podman is installed and running on your system.
-- The MongoDB keyfile and MySQL init script permissions are required for proper container operation.
+- The MySQL init script permissions are required for proper container operation.
 - For any issues, check the logs of the respective containers or Gradle output.
