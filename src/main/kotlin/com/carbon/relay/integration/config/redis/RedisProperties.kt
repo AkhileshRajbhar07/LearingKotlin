@@ -1,4 +1,4 @@
-package com.carbon.relay.integration.config
+package com.carbon.relay.integration.config.redis
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Configuration
@@ -10,6 +10,5 @@ class RedisProperties {
     var port: Int = 6379
     var authToken: String? = null
     var useTls: Boolean = false
-    var iamTokenEndpoint: String? = null
 }
 

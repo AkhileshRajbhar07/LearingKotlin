@@ -1,4 +1,4 @@
-package com.carbon.relay.integration.domains.customer.consumer
+package com.carbon.relay.integration.domains.customer.consumer.kafka
 
 import com.carbon.relay.integration.domains.customer.producer.CustomerRabbitProducer
 import com.carbon.relay.integration.domains.customer.util.RedisRateLimiterUtil
@@ -12,7 +12,11 @@ import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
 
-
+/**
+ * Kafka consumer for customer messages.
+ * Listens to the 'customer' topic, stores messages in Redis, applies distributed rate limiting,
+ * calls a third-party API, and publishes to RabbitMQ if allowed.
+ */
 @Component
 class CustomerKafkaConsumer @Autowired constructor(
     private val reactiveRedisTemplate: ReactiveRedisTemplate<String, String>,
@@ -22,6 +26,13 @@ class CustomerKafkaConsumer @Autowired constructor(
 ) {
     private val logger = LoggerFactory.getLogger(CustomerKafkaConsumer::class.java)
 
+    /**
+     * Handles incoming Kafka messages for the 'customer' topic.
+     * Stores the message in Redis, applies distributed rate limiting,
+     * calls a third-party API, and publishes to RabbitMQ if allowed.
+     *
+     * @param record The Kafka consumer record containing the message.
+     */
     @KafkaListener(topics = ["customer"], groupId = "carbon-relay-integration")
     fun listen(record: ConsumerRecord<String, String>) = runBlocking {
         logger.info("Received customer message: ${record.value()}")

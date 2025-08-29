@@ -11,6 +11,7 @@ spring:
 
   # JDBC datasource (needed for Liquibase)
   datasource:
+    jdbcUrl: jdbc:postgresql://localhost:3311/carbon_relay
     url: jdbc:postgresql://localhost:3311/carbon_relay
     username: carbon_relay_user
     password: Bql796q98CKdUrF
@@ -34,20 +35,14 @@ spring:
       security.protocol: PLAINTEXT
 
 
-  #  # Initialize schema (optional, if you want schema.sql for dev)
-  #  sql:
-  #    init:
-  #      mode: always
-  #      schema-locations: classpath:schema.sql
-
-
   liquibase:
     enabled: true
     change-log: classpath:db/changelog/db.changelog-master.xml
-
-databaseChangeLog:
-  - include:
-      file: db/changelog/db.changelog-master.xml
+    url: jdbc:postgresql://localhost:3311/carbon_relay
+    user: carbon_relay_user
+    password: Bql796q98CKdUrF
+    default-schema: public
+    driver-class-name: org.postgresql.Driver
 
 server:
   port: ${APPLICATION_PORT:8090}

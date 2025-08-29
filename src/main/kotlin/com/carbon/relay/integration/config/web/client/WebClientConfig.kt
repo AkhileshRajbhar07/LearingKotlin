@@ -1,4 +1,4 @@
-package com.carbon.relay.integration.config
+package com.carbon.relay.integration.config.web.client
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -9,4 +9,3 @@ class WebClientConfig {
     @Bean
     fun webClient(): WebClient = WebClient.builder().build()
 }
-

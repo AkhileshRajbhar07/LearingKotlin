@@ -1,6 +1,6 @@
 package com.carbon.relay.integration.domains.customer.util
 
-import com.carbon.relay.integration.domains.customer.models.Customer
+import com.carbon.relay.integration.domains.customer.infrastructure.entity.CustomerEntity
 import org.springframework.http.server.reactive.ServerHttpRequest
 import java.util.*
 
@@ -20,7 +20,7 @@ object CustomerValidation {
     private fun getBundle(locale: Locale): ResourceBundle =
         ResourceBundle.getBundle("customer-messages", locale)
 
-    fun validateForCreate(customer: Customer, request: ServerHttpRequest? = null) {
+    fun validateForCreate(customer: CustomerEntity, request: ServerHttpRequest? = null) {
         val locale = getLocaleFromRequestOrConfig(request)
         val bundle = getBundle(locale)
         require(!customer.fname.isNullOrBlank()) { bundle.getString("customer.fname.notblank") }
@@ -28,7 +28,7 @@ object CustomerValidation {
 //        require(customer.dob != null && customer.dob.matches(Regex("\\d{4}-\\d{2}-\\d{2}"))) { bundle.getString("customer.dob.format") }
     }
 
-    fun validateForUpdate(customer: Customer, request: ServerHttpRequest? = null) {
+    fun validateForUpdate(customer: CustomerEntity, request: ServerHttpRequest? = null) {
         val locale = getLocaleFromRequestOrConfig(request)
         val bundle = getBundle(locale)
         requireNotNull(customer.id) { bundle.getString("customer.id.notnull") }
