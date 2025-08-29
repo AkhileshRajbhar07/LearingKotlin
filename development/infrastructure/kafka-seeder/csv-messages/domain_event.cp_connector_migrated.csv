@@ -1,0 +1,6 @@
+{"event":"domain_event.cp_connector_migrated","timestamp":"2025-08-29T17:20:00.000Z","eventId":"connmig-0001","data":{"uuid":"conn-5001","cpUuid":"cp-6001","evseSearchString":"DE*MIG*E4001*1"}}
+{"event":"domain_event.cp_connector_migrated","timestamp":"2025-08-29T17:21:00.000Z","eventId":"connmig-0002","data":{"uuid":"conn-5002","cpUuid":"cp-6002","evseSearchString":"DE*MIG*E4002*2"}}
+{"event":"domain_event.cp_connector_migrated","timestamp":"2025-08-29T17:22:00.000Z","eventId":"connmig-0003","data":{"uuid":"conn-5003","cpUuid":"cp-6003","evseSearchString":"DE*MIG*E4003*3"}}
+{"event":"domain_event.cp_connector_migrated","timestamp":"2025-08-29T17:23:00.000Z","eventId":"connmig-0004","data":{"uuid":"conn-5004","cpUuid":"cp-6004","evseSearchString":"DE*MIG*E4004*4"}}
+{"event":"domain_event.cp_connector_migrated","timestamp":"2025-08-29T17:24:00.000Z","eventId":"connmig-0005","data":{"uuid":"conn-5005","cpUuid":"cp-6005","evseSearchString":"DE*MIG*E4005*5"}}
+

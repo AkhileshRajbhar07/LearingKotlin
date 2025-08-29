@@ -1,0 +1,41 @@
+{
+  "domain_event.cp_manually_registered": [
+    {
+      "event": "domain_event.cp_manually_registered",
+      "timestamp": "2025-08-25T13:31:31.777Z",
+      "eventId": "6c8ec4d8-605b-4986-b4fc-ff49a1ceb32e",
+      "data": {
+        "cpUuid": "f4b41a8d-43d9-4d62-8897-327b657c5d12",
+        "mandantUuid": "c2d0c821-7081-4f9f-9531-8a412ab0d5f9",
+        "companyUuid": "5e9c91da-9b0d-4d26-a18a-ff67d92d6123",
+        "chargeboxIdentity": "CHG-12345",
+        "label": "Main Street Station",
+        "serialNumber": "",
+        "street": "123 Main Street",
+        "zip": "12345",
+        "city": "Berlin",
+        "countryAlpha2": "DE",
+        "geoLat": "48.12345678",
+        "geoLong": "11.87654321"
+      }
+    }
+  ],
+  "domain_event.cp_automatically_registered": [
+    {
+      "event": "domain_event.cp_automatically_registered",
+      "timestamp": "2025-08-25T13:31:31.789Z",
+      "eventId": "e3797edb-8550-48bf-bd5d-a110254c2f84",
+      "data": {
+        "cpUuid": "98b49ec4-36d3-48b4-bc9c-5f6ad5d41359",
+        "mandantUuid": "c2d0c821-7081-4f9f-9531-8a412ab0d5f9",
+        "companyUuid": "5e9c91da-9b0d-4d26-a18a-ff67d92d6123",
+        "chargeboxIdentity": "AUTO-5678",
+        "label": "Auto Registered Station",
+        "active": true,
+        "serialNumber": "123456789",
+        "boxSerialNumber": "123456789",
+        "display": true
+      }
+    }
+  ]
+}

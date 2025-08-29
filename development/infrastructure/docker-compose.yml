@@ -92,20 +92,31 @@ services:
     depends_on:
       kafka-carbon-relay:
         condition: service_healthy
-#  kafka-seeder:
-#    image: confluentinc/cp-kafka:7.9.0
-#    depends_on:
-#      kafka-carbon-relay:
-#        condition: service_healthy
-#    volumes:
-#      - ./seed-config-kafka.sh:/usr/local/bin/seed-config-kafka.sh
-#    environment:
-#      KAFKA_BROKER: kafka-carbon-relay:9092
-#      CONFIG_TOPIC: config-topic
-#      SEED_ENV: dev
-#    entrypoint: [ "sh", "/usr/local/bin/seed-config-kafka.sh" ]
-#    networks:
-#      - default
+
+  kafka-seeder:
+    image: confluentinc/cp-kafka:7.9.0
+    depends_on:
+      kafka-carbon-relay:
+        condition: service_healthy
+    volumes:
+      - ./kafka-seeder/seed-config-kafka.sh:/usr/local/bin/seed-config-kafka.sh
+      - ./kafka-seeder/messages.json:/usr/local/bin/messages.json
+      - ./kafka-seeder/csv-messages:/usr/local/bin/csv-messages
+    environment:
+      KAFKA_BROKER: kafka-carbon-relay:9092
+    entrypoint: [ "sh", "-c", "sh /usr/local/bin/seed-config-kafka.sh" ]
+    command: >
+      sh -c "
+        apt-get update &&
+        apt-get install -y jq &&
+        sh /usr/local/bin/seed-config-kafka.sh
+      "
+    networks:
+      - default
+
+
+
+
 
 volumes:
   kafka-data-carbon-relay:

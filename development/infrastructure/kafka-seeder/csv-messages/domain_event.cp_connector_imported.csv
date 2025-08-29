@@ -1,0 +1,6 @@
+{"event":"domain_event.cp_connector_imported","timestamp":"2025-08-29T17:00:00.000Z","eventId":"connimp-0001","data":{"uuid":"conn-3001","cpUuid":"cp-4001","evseSearchString":"DE*IMP*E2001*1"}}
+{"event":"domain_event.cp_connector_imported","timestamp":"2025-08-29T17:01:00.000Z","eventId":"connimp-0002","data":{"uuid":"conn-3002","cpUuid":"cp-4002","evseSearchString":"DE*IMP*E2002*2"}}
+{"event":"domain_event.cp_connector_imported","timestamp":"2025-08-29T17:02:00.000Z","eventId":"connimp-0003","data":{"uuid":"conn-3003","cpUuid":"cp-4003","evseSearchString":"DE*IMP*E2003*3"}}
+{"event":"domain_event.cp_connector_imported","timestamp":"2025-08-29T17:03:00.000Z","eventId":"connimp-0004","data":{"uuid":"conn-3004","cpUuid":"cp-4004","evseSearchString":"DE*IMP*E2004*4"}}
+{"event":"domain_event.cp_connector_imported","timestamp":"2025-08-29T17:04:00.000Z","eventId":"connimp-0005","data":{"uuid":"conn-3005","cpUuid":"cp-4005","evseSearchString":"DE*IMP*E2005*5"}}
+

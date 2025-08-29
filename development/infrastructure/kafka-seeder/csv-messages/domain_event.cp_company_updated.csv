@@ -1,0 +1,6 @@
+{"event":"domain_event.cp_company_updated","timestamp":"2025-08-29T16:00:00.000Z","eventId":"ccu-0001","data":{"cpUuid":"cp-1001","companyUuid":"comp-2001"}}
+{"event":"domain_event.cp_company_updated","timestamp":"2025-08-29T16:01:00.000Z","eventId":"ccu-0002","data":{"cpUuid":"cp-1002","companyUuid":"comp-2002"}}
+{"event":"domain_event.cp_company_updated","timestamp":"2025-08-29T16:02:00.000Z","eventId":"ccu-0003","data":{"cpUuid":"cp-1003","companyUuid":"comp-2003"}}
+{"event":"domain_event.cp_company_updated","timestamp":"2025-08-29T16:03:00.000Z","eventId":"ccu-0004","data":{"cpUuid":"cp-1004","companyUuid":"comp-2004"}}
+{"event":"domain_event.cp_company_updated","timestamp":"2025-08-29T16:04:00.000Z","eventId":"ccu-0005","data":{"cpUuid":"cp-1005","companyUuid":"comp-2005"}}
+

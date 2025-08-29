@@ -1,0 +1,6 @@
+{"event":"domain_event.cp_connector_automatically_registered","timestamp":"2025-08-29T16:50:00.000Z","eventId":"connauto-0001","data":{"uuid":"conn-2001","cpUuid":"cp-3001","evseSearchString":"DE*AUTO*E1001*1"}}
+{"event":"domain_event.cp_connector_automatically_registered","timestamp":"2025-08-29T16:51:00.000Z","eventId":"connauto-0002","data":{"uuid":"conn-2002","cpUuid":"cp-3002","evseSearchString":"DE*AUTO*E1002*2"}}
+{"event":"domain_event.cp_connector_automatically_registered","timestamp":"2025-08-29T16:52:00.000Z","eventId":"connauto-0003","data":{"uuid":"conn-2003","cpUuid":"cp-3003","evseSearchString":"DE*AUTO*E1003*3"}}
+{"event":"domain_event.cp_connector_automatically_registered","timestamp":"2025-08-29T16:53:00.000Z","eventId":"connauto-0004","data":{"uuid":"conn-2004","cpUuid":"cp-3004","evseSearchString":"DE*AUTO*E1004*4"}}
+{"event":"domain_event.cp_connector_automatically_registered","timestamp":"2025-08-29T16:54:00.000Z","eventId":"connauto-0005","data":{"uuid":"conn-2005","cpUuid":"cp-3005","evseSearchString":"DE*AUTO*E1005*5"}}
+

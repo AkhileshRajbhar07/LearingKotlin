@@ -1,0 +1,6 @@
+{"event":"domain_event.mandant_created","timestamp":"2025-08-29T16:10:00.000Z","eventId":"mand-0001","data":{"mandantUuid":"mand-1001","name":"Tenant One","street":"100 Tenant St","zip":"10101","city":"Berlin"}}
+{"event":"domain_event.mandant_created","timestamp":"2025-08-29T16:11:00.000Z","eventId":"mand-0002","data":{"mandantUuid":"mand-1002","name":"Tenant Two","street":"200 Tenant St","zip":"20202","city":"Munich"}}
+{"event":"domain_event.mandant_created","timestamp":"2025-08-29T16:12:00.000Z","eventId":"mand-0003","data":{"mandantUuid":"mand-1003","name":"Tenant Three","street":"300 Tenant St","zip":"30303","city":"Hamburg"}}
+{"event":"domain_event.mandant_created","timestamp":"2025-08-29T16:13:00.000Z","eventId":"mand-0004","data":{"mandantUuid":"mand-1004","name":"Tenant Four","street":"400 Tenant St","zip":"40404","city":"Frankfurt"}}
+{"event":"domain_event.mandant_created","timestamp":"2025-08-29T16:14:00.000Z","eventId":"mand-0005","data":{"mandantUuid":"mand-1005","name":"Tenant Five","street":"500 Tenant St","zip":"50505","city":"Stuttgart"}}
+

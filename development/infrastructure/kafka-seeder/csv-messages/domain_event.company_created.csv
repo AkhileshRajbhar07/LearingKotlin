@@ -1,0 +1,6 @@
+{"event":"domain_event.company_created","timestamp":"2025-08-29T16:20:00.000Z","eventId":"comp-0001","data":{"companyUuid":"comp-1001","mandantUuid":"mand-1001","name":"Company One","street":"1 Company St","zip":"11111","city":"Berlin"}}
+{"event":"domain_event.company_created","timestamp":"2025-08-29T16:21:00.000Z","eventId":"comp-0002","data":{"companyUuid":"comp-1002","mandantUuid":"mand-1002","name":"Company Two","street":"2 Company St","zip":"22222","city":"Munich"}}
+{"event":"domain_event.company_created","timestamp":"2025-08-29T16:22:00.000Z","eventId":"comp-0003","data":{"companyUuid":"comp-1003","mandantUuid":"mand-1003","name":"Company Three","street":"3 Company St","zip":"33333","city":"Hamburg"}}
+{"event":"domain_event.company_created","timestamp":"2025-08-29T16:23:00.000Z","eventId":"comp-0004","data":{"companyUuid":"comp-1004","mandantUuid":"mand-1004","name":"Company Four","street":"4 Company St","zip":"44444","city":"Frankfurt"}}
+{"event":"domain_event.company_created","timestamp":"2025-08-29T16:24:00.000Z","eventId":"comp-0005","data":{"companyUuid":"comp-1005","mandantUuid":"mand-1005","name":"Company Five","street":"5 Company St","zip":"55555","city":"Stuttgart"}}
+
