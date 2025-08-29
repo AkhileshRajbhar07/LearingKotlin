@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <databaseChangeLog
-    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
 
-    <changeSet id="1-create-customer-table" author="yourname">
+    <!-- Create CUSTOMER table -->
+    <changeSet id="create-customer-table" author="aklesh.rajbhar">
+        <!-- Create the customer table with basic customer information -->
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="customer"/>
+            </not>
+        </preConditions>
         <createTable tableName="customer">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -22,5 +29,481 @@
         </createTable>
     </changeSet>
 
-</databaseChangeLog>
+    <!-- Create TENANT table -->
+    <changeSet id="create-tenant-table" author="aklesh.rajbhar">
+        <!-- Create the tenant table to store tenant/mandant information -->
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="tenant"/>
+            </not>
+        </preConditions>
+        <createTable tableName="tenant">
+            <column name="mandant_uuid" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="street" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="zip" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="city" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
 
+    <!-- Create COMPANY table -->
+    <changeSet id="create-company-table" author="aklesh.rajbhar">
+        <!-- Create the company table and link to tenant -->
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="company"/>
+            </not>
+        </preConditions>
+        <createTable tableName="company">
+            <column name="company_uuid" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="tenant_uuid" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="street" type="VARCHAR(255)"/>
+            <column name="zip" type="VARCHAR(20)"/>
+            <column name="city" type="VARCHAR(100)"/>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+    <!-- Foreign key: One Tenant -> Many Companies -->
+    <changeSet id="fk-company-tenant" author="aklesh.rajbhar">
+        <!-- Add foreign key from company.tenant_uuid to tenant.mandant_uuid -->
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_company_tenant"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint
+                baseTableName="company"
+                baseColumnNames="tenant_uuid"
+                referencedTableName="tenant"
+                referencedColumnNames="mandant_uuid"
+                constraintName="fk_company_tenant"
+                onDelete="CASCADE"
+                onUpdate="CASCADE"/>
+    </changeSet>
+
+    <!-- Create CHARGER_STATION table -->
+    <changeSet id="create-charger-station-table" author="aklesh.rajbhar">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="CHARGER_STATION"/>
+            </not>
+        </preConditions>
+        <!-- Create the charger station table and reference tenant and company -->
+        <createTable tableName="CHARGER_STATION">
+            <column name="cp_uuid" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="mandant_uuid" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="company_uuid" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pdc" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="chargebox_identity" type="VARCHAR(255)"/>
+            <column name="label" type="VARCHAR(255)"/>
+            <column name="street" type="VARCHAR(255)"/>
+            <column name="zip" type="VARCHAR(20)"/>
+            <column name="city" type="VARCHAR(255)"/>
+            <column name="country_alpha2" type="VARCHAR(2)"/>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+    <!-- Foreign key: One Tenant -> Many Charger Stations -->
+    <changeSet id="fk-charger-station-tenant" author="aklesh.rajbhar">
+        <!-- Add foreign key from CHARGER_STATION.mandant_uuid to tenant.mandant_uuid -->
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_charger_station_tenant"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint
+                baseTableName="CHARGER_STATION"
+                baseColumnNames="mandant_uuid"
+                referencedTableName="tenant"
+                referencedColumnNames="mandant_uuid"
+                constraintName="fk_charger_station_tenant"
+                onDelete="CASCADE"
+                onUpdate="CASCADE"/>
+    </changeSet>
+
+    <!-- Foreign key: One Company -> Many Charger Stations -->
+    <changeSet id="fk-charger-station-company" author="aklesh.rajbhar">
+        <!-- Add foreign key from CHARGER_STATION.company_uuid to company.company_uuid -->
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_charger_station_company"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint
+                baseTableName="CHARGER_STATION"
+                baseColumnNames="company_uuid"
+                referencedTableName="company"
+                referencedColumnNames="company_uuid"
+                constraintName="fk_charger_station_company"
+                onDelete="CASCADE"
+                onUpdate="CASCADE"/>
+    </changeSet>
+
+    <!-- Create CONNECTORS table -->
+    <changeSet id="create-connectors-table" author="aklesh.rajbhar">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="connectors"/>
+            </not>
+        </preConditions>
+        <!-- Create the connectors table and reference CHARGER_STATION -->
+        <createTable tableName="connectors">
+            <column name="connector_uuid" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="charger_station_uuid" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="evse_search_string" type="VARCHAR(255)"/>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+    <!-- Foreign key: One CHARGER_STATION -> Many connectors -->
+    <changeSet id="fk-connectors-charger-station" author="aklesh.rajbhar">
+        <!-- Add foreign key from connectors.charger_station_uuid to CHARGER_STATION.cp_uuid -->
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_connectors_charger_station"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint
+                baseTableName="connectors"
+                baseColumnNames="charger_station_uuid"
+                referencedTableName="CHARGER_STATION"
+                referencedColumnNames="cp_uuid"
+                constraintName="fk_connectors_charger_station"
+                onDelete="CASCADE"
+                onUpdate="CASCADE"/>
+    </changeSet>
+
+    <!-- Create CHARGE_DETAIL table -->
+    <changeSet id="create-charge-detail-table" author="akhilesh">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="charge_detail"/>
+            </not>
+        </preConditions>
+        <!-- Create the charge_detail table and reference connectors -->
+        <createTable tableName="charge_detail">
+            <column name="charge_log_uuid" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="connector_uuid" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="meter_start" type="FLOAT"/>
+            <column name="meter_end" type="FLOAT"/>
+            <column name="charge_log_end" type="TIMESTAMP"/>
+            <column name="charge_log_rec_end" type="TIMESTAMP"/>
+            <column name="created_at" type="TIMESTAMP" defaultValueDate="CURRENT_TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+    <!-- Foreign key: One connector -> Many charge_detail -->
+    <changeSet id="fk-charge-detail-connector" author="akhilesh">
+        <!-- Add foreign key from charge_detail.connector_uuid to connectors.connector_uuid -->
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_charge_detail_connector"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint
+                baseTableName="charge_detail"
+                baseColumnNames="connector_uuid"
+                referencedTableName="connectors"
+                referencedColumnNames="connector_uuid"
+                constraintName="fk_charge_detail_connector"
+                onDelete="CASCADE"
+                onUpdate="CASCADE"/>
+    </changeSet>
+
+
+    <changeSet id="create-session-sync-success-event-table" author="aklesh.rajbhar">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="session_sync_success_event"/>
+            </not>
+        </preConditions>
+
+        <!-- Create session_sync_success_event table and reference charge_detail -->
+        <createTable tableName="session_sync_success_event">
+
+            <column name="session_sync_success_event_id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="charge_log_uuid" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="payload" type="CLOB">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <!-- Add FK to create one-to-many relationship -->
+        <addForeignKeyConstraint
+                baseTableName="session_sync_success_event"
+                baseColumnNames="charge_log_uuid"
+                constraintName="fk_session_charge_detail"
+                referencedTableName="charge_detail"
+                referencedColumnNames="charge_log_uuid"/>
+    </changeSet>
+
+    <!-- Create pending_session_event_sync table -->
+    <changeSet id="create-pending-session-event-sync-table" author="aklesh.rajbhar">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="pending_session_event_sync"/>
+            </not>
+        </preConditions>
+        <createTable tableName="pending_session_event_sync">
+            <column name="pending_session_event_sync_id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="charge_log_uuid" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="payload" type="jsonb">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Add foreign key for one-to-many relationship -->
+    <changeSet id="fk-pending-session-event-sync-charge-detail" author="aklesh.rajbhar">
+        <addForeignKeyConstraint
+                baseTableName="pending_session_event_sync"
+                baseColumnNames="charge_log_uuid"
+                constraintName="fk_pending_session_event_sync_charge_detail"
+                referencedTableName="charge_detail"
+                referencedColumnNames="charge_log_uuid"
+                onDelete="CASCADE"/>
+    </changeSet>
+
+
+    <changeSet id="create-session-sync-failed-event-table" author="aklesh">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="session_sync_failed_event"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="session_sync_failed_event">
+            <column name="session_sync_failed_event_id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="charge_log_uuid" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payload" type="JSONB"/>
+            <column name="reason" type="VARCHAR(255)"/>
+            <column name="number_of_retries" type="INTEGER"/>
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="fk-failed-session-event-sync-charge-detail" author="aklesh.rajbhar">
+        <addForeignKeyConstraint
+                baseTableName="session_sync_failed_event"
+                baseColumnNames="charge_log_uuid"
+                constraintName="fk_failed_session_event_sync_charge_detail"
+                referencedTableName="charge_detail"
+                referencedColumnNames="charge_log_uuid"
+                onDelete="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="create-pending-charger-event-sync" author="akhilesh">
+        <createTable tableName="pending_charger_event_sync">
+
+            <column name="pending_charger_event_sync_id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="cp_uuid" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="type" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="payload" type="TEXT"/>
+
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+
+    <!-- Foreign key: One CHARGER_STATION -> Many connectors -->
+    <changeSet id="fk-pending-charger-event-sync-charger-station" author="aklesh.rajbhar">
+        <!-- Add foreign key from pending_charger_event_sync.charger_station_uuid to CHARGER_STATION.cp_uuid -->
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk-pending-charger-event-sync-charger-station"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint
+                baseTableName="pending_charger_event_sync"
+                baseColumnNames="pending_charger_event_sync_id"
+                referencedTableName="CHARGER_STATION"
+                referencedColumnNames="cp_uuid"
+                constraintName="fk-pending-charger-event-sync-charger-station"
+                onDelete="CASCADE"
+                onUpdate="CASCADE"/>
+    </changeSet>
+
+
+    <changeSet id="create-charger-sync-failed-event-table" author="aklesh.rajbhar">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="charger_sync_failed_event"/>
+            </not>
+        </preConditions>
+        <createTable tableName="charger_sync_failed_event">
+
+            <column name="charger_sync_failed_event_id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="cp_uuid" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- If your PostgreSQL version supports JSONB, prefer JSONB over plain JSON -->
+            <column name="payload" type="JSONB"/>
+
+            <column name="reason" type="VARCHAR(500)"/>
+
+            <column name="number_of_retries" type="INTEGER" defaultValueNumeric="0"/>
+
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+
+
+    <changeSet id="fk-failed-charger-event-sync-charger-station" author="aklesh.rajbhar">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk-failed-charger-event-sync-charger-station"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint
+                baseTableName="charger_sync_failed_event"
+                baseColumnNames="charger_sync_failed_event_id"
+                referencedTableName="CHARGER_STATION"
+                referencedColumnNames="cp_uuid"
+                constraintName="fk-failed-charger-event-sync-charger-station"
+                onDelete="CASCADE"
+                onUpdate="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="create-charger-sync-success-event-table" author="aklesh.rajbhar">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="charger_sync_success_event"/>
+            </not>
+        </preConditions>
+        <createTable tableName="charger_sync_success_event">
+
+            <column name="charger_sync_success_event_id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="cp_uuid" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- If your PostgreSQL version supports JSONB, prefer JSONB over plain JSON -->
+            <column name="payload" type="JSONB"/>
+
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="fk-success-charger-event-sync-charger-station" author="aklesh.rajbhar">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk-success-charger-event-sync-charger-station"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint
+                baseTableName="charger_sync_success_event"
+                baseColumnNames="charger_sync_success_event_id"
+                referencedTableName="CHARGER_STATION"
+                referencedColumnNames="cp_uuid"
+                constraintName="fk-success-charger-event-sync-charger-station"
+                onDelete="CASCADE"
+                onUpdate="CASCADE"/>
+    </changeSet>
+
+</databaseChangeLog>
