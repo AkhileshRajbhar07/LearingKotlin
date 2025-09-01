@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 data class ChargerStationEntity(
     @Id
     @org.springframework.data.relational.core.mapping.Column("cp_uuid")
-    val cpUuid: String,
+    val cpUuid: String? = null,
     @org.springframework.data.relational.core.mapping.Column("mandant_uuid")
     val mandantUuid: String,
     @org.springframework.data.relational.core.mapping.Column("company_uuid")

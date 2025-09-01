@@ -74,7 +74,7 @@
             </not>
         </preConditions>
         <createTable tableName="charger_station">
-            <column name="cp_uuid" type="VARCHAR(50)">
+            <column name="cp_uuid" type="VARCHAR(50)" defaultValueComputed="gen_random_uuid()">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="mandant_uuid" type="VARCHAR(50)">

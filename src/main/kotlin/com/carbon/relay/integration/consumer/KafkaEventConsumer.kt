@@ -1,10 +1,8 @@
 package com.carbon.relay.integration.consumer
 
 import com.carbon.relay.integration.domains.company.usecase.CompanyService
-import com.carbon.relay.integration.domains.tenant.infrastructure.entity.TenantEntity
+import com.carbon.relay.integration.domains.station.usecase.StationService
 import com.carbon.relay.integration.domains.tenant.usecase.TenantService
-import com.carbon.relay.integration.utils.mapper.TenantObjectMapper
-import kotlinx.coroutines.reactor.awaitSingle
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Service
@@ -13,7 +11,8 @@ import org.springframework.stereotype.Service
 @Service
 class KafkaEventConsumer(
     private val tenantService: TenantService,
-    private val companyService: CompanyService
+    private val companyService: CompanyService,
+    private val stationService: StationService
 ) {
 
     private val logger = LoggerFactory.getLogger(KafkaEventConsumer::class.java)
@@ -23,8 +22,13 @@ class KafkaEventConsumer(
         groupId = "\${kafka.groups.domain_event.cp-manually-registered}"
 
     )
-    fun consumeCpManuallyRegistered(message: String?) {
-        println("Received cp-manually-registered event: " + message)
+    suspend fun consumeCpManuallyRegistered(message: String?) {
+        logger.info("Received cp-manually-registered event: " + message)
+        if (message == null) {
+            logger.error("Received null message for cp-manually-registered event")
+            return
+        }
+        stationService.createChargerStation(message)
     }
 
     @KafkaListener(
@@ -32,7 +36,7 @@ class KafkaEventConsumer(
         groupId = "\${kafka.groups.domain_event.cp-imported}"
     )
     fun consumeCpImported(message: String?) {
-        println("Received cp-imported event: " + message)
+        logger.info("Received cp-imported event: " + message)
     }
 
     @KafkaListener(
@@ -40,7 +44,7 @@ class KafkaEventConsumer(
         groupId = "\${kafka.groups.domain_event.cp-migrated}"
     )
     fun consumeCpMigrated(message: String?) {
-        println("Received cp-migrated event: " + message)
+        logger.info("Received cp-migrated event: " + message)
     }
 
     @KafkaListener(
@@ -48,7 +52,7 @@ class KafkaEventConsumer(
         groupId = "\${kafka.groups.domain_event.cp-automatically-registered}"
     )
     fun consumeCpAutomaticallyRegistered(message: String?) {
-        println("Received cp-automatically-registered event: " + message)
+        logger.info("Received cp-automatically-registered event: " + message)
     }
 
     @KafkaListener(
@@ -56,7 +60,7 @@ class KafkaEventConsumer(
         groupId = "\${kafka.groups.domain_event.cp-address-updated}"
     )
     fun consumeCpAddressUpdated(message: String?) {
-        println("Received cp-address-updated event: " + message)
+        logger.info("Received cp-address-updated event: " + message)
     }
 
     @KafkaListener(
@@ -64,7 +68,7 @@ class KafkaEventConsumer(
         groupId = "\${kafka.groups.domain_event.cp-company-updated}"
     )
     fun consumeCpCompanyUpdated(message: String?) {
-        println("Received cp-company-updated event: " + message)
+        logger.info("Received cp-company-updated event: " + message)
     }
 
     @KafkaListener(
@@ -99,7 +103,7 @@ class KafkaEventConsumer(
         groupId = "\${kafka.groups.domain_event.cp-connector-automatically-registered}"
     )
     fun consumeCpConnectorAutomaticallyRegistered(message: String?) {
-        println("Received cp-connector-automatically-registered event: " + message)
+        logger.info("Received cp-connector-automatically-registered event: " + message)
     }
 
     @KafkaListener(
@@ -107,7 +111,7 @@ class KafkaEventConsumer(
         groupId = "\${kafka.groups.domain_event.cp-connector-imported}"
     )
     fun consumeCpConnectorImported(message: String?) {
-        println("Received cp-connector-imported event: " + message)
+        logger.info("Received cp-connector-imported event: " + message)
     }
 
     @KafkaListener(
@@ -115,7 +119,7 @@ class KafkaEventConsumer(
         groupId = "\${kafka.groups.domain_event.cp-connector-manually-registered}"
     )
     fun consumeCpConnectorManuallyRegistered(message: String?) {
-        println("Received cp-connector-manually-registered event: " + message)
+        logger.info("Received cp-connector-manually-registered event: " + message)
     }
 
     @KafkaListener(
@@ -123,7 +127,7 @@ class KafkaEventConsumer(
         groupId = "\${kafka.groups.domain_event.cp-connector-migrated}"
     )
     fun consumeCpConnectorMigrated(message: String?) {
-        println("Received cp-connector-migrated event: " + message)
+        logger.info("Received cp-connector-migrated event: " + message)
     }
 
     @KafkaListener(
@@ -131,6 +135,6 @@ class KafkaEventConsumer(
         groupId = "\${kafka.groups.domain_event.evse-id-updated}"
     )
     fun consumeEvseIdUpdated(message: String?) {
-        println("Received evse-id-updated event: " + message)
+        logger.info("Received evse-id-updated event: " + message)
     }
 }
