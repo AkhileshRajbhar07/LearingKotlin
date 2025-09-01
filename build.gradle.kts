@@ -87,6 +87,8 @@ dependencies {
 	implementation("com.bucket4j:bucket4j_jdk17-redis-common:8.15.0")
 	implementation("com.bucket4j:bucket4j_jdk17-lettuce:8.15.0")
 
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+
 }
 
 

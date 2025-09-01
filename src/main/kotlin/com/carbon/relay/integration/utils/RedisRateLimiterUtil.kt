@@ -1,4 +1,4 @@
-package com.carbon.relay.integration.domains.customer.util
+package com.carbon.relay.integration.utils
 
 import io.github.bucket4j.Bandwidth
 import io.github.bucket4j.BucketConfiguration

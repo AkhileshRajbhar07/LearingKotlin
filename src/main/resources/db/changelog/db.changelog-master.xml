@@ -13,7 +13,7 @@
             </not>
         </preConditions>
         <createTable tableName="tenant">
-            <column name="mandant_uuid" type="VARCHAR(50)">
+            <column name="mandant_uuid" type="VARCHAR(50)" defaultValueComputed="gen_random_uuid()">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="street" type="VARCHAR(255)"/>
@@ -32,7 +32,7 @@
             </not>
         </preConditions>
         <createTable tableName="company">
-            <column name="company_uuid" type="VARCHAR(50)">
+            <column name="company_uuid" type="VARCHAR(50)" defaultValueComputed="gen_random_uuid()">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="tenant_uuid" type="VARCHAR(50)">

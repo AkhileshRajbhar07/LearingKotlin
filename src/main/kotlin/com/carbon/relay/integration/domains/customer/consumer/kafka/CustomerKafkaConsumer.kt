@@ -1,7 +1,7 @@
 package com.carbon.relay.integration.domains.customer.consumer.kafka
 
 import com.carbon.relay.integration.domains.customer.producer.CustomerRabbitProducer
-import com.carbon.relay.integration.domains.customer.util.RedisRateLimiterUtil
+import com.carbon.relay.integration.utils.RedisRateLimiterUtil
 import io.github.bucket4j.distributed.proxy.ProxyManager
 import kotlinx.coroutines.runBlocking
 import org.apache.kafka.clients.consumer.ConsumerRecord

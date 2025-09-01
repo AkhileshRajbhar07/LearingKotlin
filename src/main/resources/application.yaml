@@ -109,3 +109,36 @@ external:
   service:
     qualicharge:
       url: ${QUALICHARGE_URL:http://localhost:54583}
+
+
+kafka:
+  topics:
+    domain_event:
+      cp-manually-registered: cp_manually_registered
+      cp-imported: cp_imported
+      cp-migrated: cp_migrated
+      cp-automatically-registered: cp_automatically_registered
+      cp-address-updated: cp_address_updated
+      cp-company-updated: cp_company_updated
+      mandant-created: mandant_created
+      company-created: company_created
+      cp-connector-automatically-registered: cp_connector_automatically_registered
+      cp-connector-imported: cp_connector_imported
+      cp-connector-manually-registered: cp_connector_manually_registered
+      cp-connector-migrated: cp_connector_migrated
+      evse-id-updated: evse_id_updated
+  groups:
+    domain_event:
+      cp-manually-registered: cp-manually-registered-group
+      cp-imported: cp-imported-group
+      cp-migrated: cp-migrated-group
+      cp-automatically-registered: cp-automatically-registered-group
+      cp-address-updated: cp-address-updated-group
+      cp-company-updated: cp-company-updated-group
+      mandant-created: mandant-created-group
+      company-created: company-created-group
+      cp-connector-automatically-registered: cp-connector-automatically-registered-group
+      cp-connector-imported: cp-connector-imported-group
+      cp-connector-manually-registered: cp-connector-manually-registered-group
+      cp-connector-migrated: cp-connector-migrated-group
+      evse-id-updated: evse-id-updated-group
