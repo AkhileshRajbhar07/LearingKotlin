@@ -1,10 +1,14 @@
 package com.carbon.relay.integration.domains.station.infrastructure.entity
 
-import org.springframework.data.annotation.Id
-import org.springframework.data.relational.core.mapping.Table
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import jakarta.persistence.Table
+
+
 import java.time.LocalDateTime
 
-@Table("charger_sync_success_event")
+@Entity
+@Table(name = "charger_sync_success_event")
 data class ChargerSyncSuccessEventEntity(
     @Id
     val chargerSyncSuccessEventId: String,

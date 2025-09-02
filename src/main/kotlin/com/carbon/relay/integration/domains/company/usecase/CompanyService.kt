@@ -23,7 +23,7 @@ class CompanyService(
         val companyEntities = companyObjectMapper.kafkaJsonToCompanyEntity(payload)
         for (companyEntity in companyEntities) {
             logger.info(" $companyEntity")
-            companyRepository.save<CompanyEntity>(companyEntity).awaitSingle()
+            companyRepository.save<CompanyEntity>(companyEntity)
         }
     }
 }

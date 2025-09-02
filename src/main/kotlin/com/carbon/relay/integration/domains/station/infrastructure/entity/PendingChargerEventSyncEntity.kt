@@ -1,20 +1,23 @@
 package com.carbon.relay.integration.domains.station.infrastructure.entity
 
-import org.springframework.data.annotation.Id
-import org.springframework.data.relational.core.mapping.Table
-import java.time.LocalDateTime
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import jakarta.persistence.Table
 
-@Table("pending_charger_event_sync")
+
+@Entity
+@Table(name = "pending_charger_event_sync")
 data class PendingChargerEventSyncEntity(
     @Id
-    @org.springframework.data.relational.core.mapping.Column("pending_charger_event_sync_id")
+    @Column("pending_charger_event_sync_id")
     val pendingChargerEventSyncId: String,
-    @org.springframework.data.relational.core.mapping.Column("cp_uuid")
+    @Column("cp_uuid")
     val cpUuid: String,
-    @org.springframework.data.relational.core.mapping.Column("type")
+    @Column("type")
     val type: String,
-    @org.springframework.data.relational.core.mapping.Column("payload")
+    @Column("payload")
     val payload: String?, // TEXT
-    @org.springframework.data.relational.core.mapping.Column("created_at")
+    @Column("created_at")
     val createdAt: java.time.LocalDateTime
 )

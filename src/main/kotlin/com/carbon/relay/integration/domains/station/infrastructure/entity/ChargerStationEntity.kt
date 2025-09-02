@@ -1,34 +1,39 @@
 package com.carbon.relay.integration.domains.station.infrastructure.entity
 
-import org.springframework.data.annotation.Id
-import org.springframework.data.relational.core.mapping.Table
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import jakarta.persistence.Table
+
+
 import java.time.LocalDateTime
 
-@Table("charger_station")
+@Entity
+@Table(name = "charger_station")
 data class ChargerStationEntity(
     @Id
-    @org.springframework.data.relational.core.mapping.Column("cp_uuid")
+    @Column("cp_uuid")
     val cpUuid: String? = null,
-    @org.springframework.data.relational.core.mapping.Column("mandant_uuid")
+    @Column("mandant_uuid")
     val mandantUuid: String,
-    @org.springframework.data.relational.core.mapping.Column("company_uuid")
+    @Column("company_uuid")
     val companyUuid: String,
-    @org.springframework.data.relational.core.mapping.Column("pdc")
+    @Column("pdc")
     val pdc: String,
-    @org.springframework.data.relational.core.mapping.Column("chargebox_identity")
+    @Column("chargebox_identity")
     val chargeboxIdentity: String?,
-    @org.springframework.data.relational.core.mapping.Column("label")
+    @Column("label")
     val label: String?,
-    @org.springframework.data.relational.core.mapping.Column("street")
+    @Column("street")
     val street: String?,
-    @org.springframework.data.relational.core.mapping.Column("zip")
+    @Column("zip")
     val zip: String?,
-    @org.springframework.data.relational.core.mapping.Column("city")
+    @Column("city")
     val city: String?,
-    @org.springframework.data.relational.core.mapping.Column("country_alpha2")
+    @Column("country_alpha2")
     val countryAlpha2: String?,
-    @org.springframework.data.relational.core.mapping.Column("created_at")
+    @Column("created_at")
     val createdAt: LocalDateTime?,
-    @org.springframework.data.relational.core.mapping.Column("updated_at")
+    @Column("updated_at")
     val updatedAt: LocalDateTime?
 )

@@ -1,10 +1,13 @@
 package com.carbon.relay.integration.consumer
 
 import com.carbon.relay.integration.domains.company.usecase.CompanyService
+import com.carbon.relay.integration.domains.connectors.usecase.ConnectorsService
 import com.carbon.relay.integration.domains.station.usecase.StationService
 import com.carbon.relay.integration.domains.tenant.usecase.TenantService
+import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.annotation.KafkaListener
+import org.springframework.kafka.support.Acknowledgment
 import org.springframework.stereotype.Service
 
 
@@ -12,18 +15,19 @@ import org.springframework.stereotype.Service
 class KafkaEventConsumer(
     private val tenantService: TenantService,
     private val companyService: CompanyService,
-    private val stationService: StationService
+    private val stationService: StationService,
+    private val connectorsService: ConnectorsService
 ) {
 
     private val logger = LoggerFactory.getLogger(KafkaEventConsumer::class.java)
 
     @KafkaListener(
-        topics = ["\${kafka.topics.domain_event.cp-manually-registered}"],
-        groupId = "\${kafka.groups.domain_event.cp-manually-registered}"
+        topics = ["\${kafka.topics.cp-manually-registered}"],
+        groupId = "\${kafka.groups.cp-manually-registered}"
 
     )
     suspend fun consumeCpManuallyRegistered(message: String?) {
-        logger.info("Received cp-manually-registered event: " + message)
+        logger.info("Received cp-manually-registered event: $message")
         if (message == null) {
             logger.error("Received null message for cp-manually-registered event")
             return
@@ -32,64 +36,59 @@ class KafkaEventConsumer(
     }
 
     @KafkaListener(
-        topics = ["\${kafka.topics.domain_event.cp-imported}"],
-        groupId = "\${kafka.groups.domain_event.cp-imported}"
+        topics = ["\${kafka.topics.cp-imported}"],
+        groupId = "\${kafka.groups.cp-imported}"
     )
     fun consumeCpImported(message: String?) {
-        logger.info("Received cp-imported event: " + message)
+        logger.info("Received cp-imported event: $message")
     }
 
     @KafkaListener(
-        topics = ["\${kafka.topics.domain_event.cp-migrated}"],
-        groupId = "\${kafka.groups.domain_event.cp-migrated}"
+        topics = ["\${kafka.topics.cp-migrated}"],
+        groupId = "\${kafka.groups.cp-migrated}"
     )
     fun consumeCpMigrated(message: String?) {
-        logger.info("Received cp-migrated event: " + message)
+        logger.info("Received cp-migrated event: $message")
     }
 
     @KafkaListener(
-        topics = ["\${kafka.topics.domain_event.cp-automatically-registered}"],
-        groupId = "\${kafka.groups.domain_event.cp-automatically-registered}"
+        topics = ["\${kafka.topics.cp-automatically-registered}"],
+        groupId = "\${kafka.groups.cp-automatically-registered}"
     )
     fun consumeCpAutomaticallyRegistered(message: String?) {
-        logger.info("Received cp-automatically-registered event: " + message)
+        logger.info("Received cp-automatically-registered event: $message")
     }
 
     @KafkaListener(
-        topics = ["\${kafka.topics.domain_event.cp-address-updated}"],
-        groupId = "\${kafka.groups.domain_event.cp-address-updated}"
+        topics = ["\${kafka.topics.cp-address-updated}"],
+        groupId = "\${kafka.groups.cp-address-updated}"
     )
     fun consumeCpAddressUpdated(message: String?) {
-        logger.info("Received cp-address-updated event: " + message)
+        logger.info("Received cp-address-updated event: $message")
     }
 
     @KafkaListener(
-        topics = ["\${kafka.topics.domain_event.cp-company-updated}"],
-        groupId = "\${kafka.groups.domain_event.cp-company-updated}"
+        topics = ["\${kafka.topics.cp-company-updated}"],
+        groupId = "\${kafka.groups.cp-company-updated}"
     )
     fun consumeCpCompanyUpdated(message: String?) {
-        logger.info("Received cp-company-updated event: " + message)
+        logger.info("Received cp-company-updated event: $message")
     }
 
     @KafkaListener(
-        topics = ["\${kafka.topics.domain_event.mandant-created}"],
-        groupId = "\${kafka.groups.domain_event.mandant-created}"
+        topics = ["\${kafka.topics.mandant-created}"],
+        groupId = "\${kafka.groups.mandant-created}"
     )
-    suspend fun consumeMandantCreated(message: String?) {
-        logger.info("Received mandant-created event: " + message)
-        if (message == null) {
-            logger.error("Received null message for mandant-created event")
-            return
-        }
-        tenantService.createTenant(message)
+    suspend fun consumeMandantCreated(records: List<ConsumerRecord<String, String>>, ack: Acknowledgment) {
+        tenantService.createTenant(records,ack)
     }
 
     @KafkaListener(
-        topics = ["\${kafka.topics.domain_event.company-created}"],
-        groupId = "\${kafka.groups.domain_event.company-created}"
+        topics = ["\${kafka.topics.company-created}"],
+        groupId = "\${kafka.groups.company-created}"
     )
     suspend fun consumeCompanyCreated(message: String?) {
-        logger.info("Received company-created event: " + message)
+        logger.info("Received company-created event: $message")
 
         if (message == null) {
             logger.error("Received null message for company-created event")
@@ -99,42 +98,42 @@ class KafkaEventConsumer(
     }
 
     @KafkaListener(
-        topics = ["\${kafka.topics.domain_event.cp-connector-automatically-registered}"],
-        groupId = "\${kafka.groups.domain_event.cp-connector-automatically-registered}"
+        topics = ["\${kafka.topics.cp-connector-automatically-registered}"],
+        groupId = "\${kafka.groups.cp-connector-automatically-registered}"
     )
     fun consumeCpConnectorAutomaticallyRegistered(message: String?) {
-        logger.info("Received cp-connector-automatically-registered event: " + message)
+        logger.info("Received cp-connector-automatically-registered event: $message")
     }
 
     @KafkaListener(
-        topics = ["\${kafka.topics.domain_event.cp-connector-imported}"],
-        groupId = "\${kafka.groups.domain_event.cp-connector-imported}"
+        topics = ["\${kafka.topics.cp-connector-imported}"],
+        groupId = "\${kafka.groups.cp-connector-imported}"
     )
     fun consumeCpConnectorImported(message: String?) {
-        logger.info("Received cp-connector-imported event: " + message)
+        logger.info("Received cp-connector-imported event: $message")
     }
 
     @KafkaListener(
-        topics = ["\${kafka.topics.domain_event.cp-connector-manually-registered}"],
-        groupId = "\${kafka.groups.domain_event.cp-connector-manually-registered}"
+        topics = ["\${kafka.topics.cp-connector-manually-registered}"],
+        groupId = "\${kafka.groups.cp-connector-manually-registered}"
     )
     fun consumeCpConnectorManuallyRegistered(message: String?) {
-        logger.info("Received cp-connector-manually-registered event: " + message)
+        logger.info("Received cp-connector-manually-registered event: $message")
     }
 
     @KafkaListener(
-        topics = ["\${kafka.topics.domain_event.cp-connector-migrated}"],
-        groupId = "\${kafka.groups.domain_event.cp-connector-migrated}"
+        topics = ["\${kafka.topics.cp-connector-migrated}"],
+        groupId = "\${kafka.groups.cp-connector-migrated}"
     )
     fun consumeCpConnectorMigrated(message: String?) {
-        logger.info("Received cp-connector-migrated event: " + message)
+        logger.info("Received cp-connector-migrated event: $message")
     }
 
     @KafkaListener(
-        topics = ["\${kafka.topics.domain_event.evse-id-updated}"],
-        groupId = "\${kafka.groups.domain_event.evse-id-updated}"
+        topics = ["\${kafka.topics.evse-id-updated}"],
+        groupId = "\${kafka.groups.evse-id-updated}"
     )
     fun consumeEvseIdUpdated(message: String?) {
-        logger.info("Received evse-id-updated event: " + message)
+        logger.info("Received evse-id-updated event: $message")
     }
 }

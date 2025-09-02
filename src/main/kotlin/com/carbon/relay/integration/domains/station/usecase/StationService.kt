@@ -25,7 +25,7 @@ class StationService(
         val stationEntities = stationObjectMapper.kafkaJsonToChargerStationEntity(payload)
         for (stationEntity in stationEntities) {
             logger.info(" $stationEntity")
-            chargerStationRepository.save<ChargerStationEntity>(stationEntity).awaitSingle()
+            chargerStationRepository.save<ChargerStationEntity>(stationEntity)
         }
     }
 

@@ -1,8 +1,10 @@
 package com.carbon.relay.integration.domains.customer.infrastructure.entity
 
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import jakarta.persistence.Table
 import kotlinx.serialization.Serializable
-import org.springframework.data.annotation.Id
-import org.springframework.data.relational.core.mapping.Table
+
 import java.time.LocalDate
 
 /**
@@ -10,7 +12,8 @@ import java.time.LocalDate
  * Used by the repository and service layers for persistence and business logic.
  */
 @Serializable
-@Table("customer")
+@Table(name = "customer")
+@Entity
 data class CustomerEntity(
     @Id
     val id: Long? = null, // Database-generated customer ID

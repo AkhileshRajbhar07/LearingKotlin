@@ -6,6 +6,7 @@ import com.carbon.relay.integration.spring.rest.request.CustomerPatchRequest
 import kotlinx.coroutines.reactor.awaitSingle
 import kotlinx.coroutines.reactor.awaitSingleOrNull
 import org.springframework.stereotype.Service
+import java.util.Optional
 
 /**
  * Service class for customer business logic and data access.
@@ -17,16 +18,16 @@ class CustomerService(private val customerRepository: CustomerRepository) {
      * Retrieves all customers from the database.
      * @return List of all customers.
      */
-    suspend fun getAllCustomers(): List<CustomerEntity> = customerRepository.findAll().collectList().awaitSingle()
+    suspend fun getAllCustomers(): List<CustomerEntity> = customerRepository.findAll()
 
     /**
      * Retrieves a customer by ID.
      * @param id The customer ID as a string.
      * @return The customer if found, null otherwise.
      */
-    suspend fun getCustomerById(id: String): CustomerEntity? {
+    suspend fun getCustomerById(id: String): Optional<CustomerEntity?>? {
         val longId: Long = id.toLongOrNull() ?: return null
-        return customerRepository.findById(longId).awaitSingleOrNull()
+        return customerRepository.findById(longId)
     }
 
     /**
@@ -37,9 +38,9 @@ class CustomerService(private val customerRepository: CustomerRepository) {
      */
     suspend fun updateCustomer(id: String, customer: CustomerEntity): CustomerEntity? {
         val longId: Long = id.toLongOrNull() ?: return null
-        val existing: CustomerEntity = customerRepository.findById(longId).awaitSingleOrNull() ?: return null
+        val existing: Optional<CustomerEntity?> = customerRepository.findById(longId)
         val updated: CustomerEntity = customer.copy(id = longId)
-        return customerRepository.save(updated).awaitSingleOrNull()
+        return customerRepository.save(updated)
     }
 
     /**
@@ -50,13 +51,13 @@ class CustomerService(private val customerRepository: CustomerRepository) {
      */
     suspend fun patchCustomer(id: String, patch: CustomerPatchRequest): CustomerEntity? {
         val longId: Long = id.toLongOrNull() ?: return null
-        val existing: CustomerEntity = customerRepository.findById(longId).awaitSingleOrNull() ?: return null
+        val existing: CustomerEntity? = customerRepository.findById(longId).get()
         val updated: CustomerEntity = CustomerEntity(
-            id = existing.id,
-            fname = patch.fname ?: existing.fname,
-            lname = patch.lname ?: existing.lname,
-            dob = patch.dob ?: existing.dob
+            id = existing?.id,
+            fname = patch.fname ?: existing?.fname,
+            lname = patch.lname ?: existing?.lname,
+            dob = patch.dob ?: existing?.dob
         )
-        return customerRepository.save(updated).awaitSingleOrNull()
+        return customerRepository.save(updated)
     }
 }

@@ -42,8 +42,12 @@ dependencies {
 	implementation("org.springdoc:springdoc-openapi-starter-common:$springDoc")
 	implementation("org.springframework.kafka:spring-kafka:3.2.4")
 //	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
-	implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
+//	implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
 	implementation("org.springframework.boot:spring-boot-starter-jdbc:$springBootVersion")
+
+    //Jpa Repository
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+
 
 
 
@@ -56,9 +60,10 @@ dependencies {
 
 
 	//postgresql
-	implementation("org.postgresql:r2dbc-postgresql")
+//	implementation("org.postgresql:r2dbc-postgresql")
 	implementation("com.zaxxer:HikariCP:7.0.0")
 	implementation("org.postgresql:postgresql:42.7.7")  // Move from runtimeOnly to implementation
+    runtimeOnly("org.postgresql:postgresql")
 
 	// JobRuner
 	implementation("org.jobrunr:jobrunr:7.5.2")

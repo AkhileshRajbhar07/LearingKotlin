@@ -2,17 +2,19 @@ package com.carbon.relay.integration.domains.tenant.infrastructure.entity
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import org.springframework.data.annotation.Id
-import org.springframework.data.relational.core.mapping.Column
-import org.springframework.data.relational.core.mapping.Table
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import jakarta.persistence.Table
 import java.time.LocalDateTime
 
-@Table("tenant")
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Entity
+@Table(name = "tenant")
+@JsonIgnoreProperties
 data class TenantEntity(
     @Id
     @Column("mandant_uuid")
-    val mandantUuid: String? = null,
+    var mandantUuid: String? = null,
     @Column("street")
     val street: String?,
     @Column("zip")

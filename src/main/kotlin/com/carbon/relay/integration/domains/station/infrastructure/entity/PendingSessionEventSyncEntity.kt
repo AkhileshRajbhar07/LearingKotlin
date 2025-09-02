@@ -1,18 +1,23 @@
 package com.carbon.relay.integration.domains.station.infrastructure.entity
 
-import org.springframework.data.annotation.Id
-import org.springframework.data.relational.core.mapping.Table
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import jakarta.persistence.Table
+
+
 import java.time.LocalDateTime
 
-@Table("pending_session_event_sync")
+@Entity
+@Table(name = "pending_session_event_sync")
 data class PendingSessionEventSyncEntity(
     @Id
-    @org.springframework.data.relational.core.mapping.Column("pending_session_event_sync_id")
+    @Column("pending_session_event_sync_id")
     val pendingSessionEventSyncId: String,
-    @org.springframework.data.relational.core.mapping.Column("charge_log_uuid")
+    @Column("charge_log_uuid")
     val chargeLogUuid: String?,
-    @org.springframework.data.relational.core.mapping.Column("payload")
+    @Column("payload")
     val payload: String?, // JSONB or CLOB, use String for now
-    @org.springframework.data.relational.core.mapping.Column("created_at")
+    @Column("created_at")
     val createdAt: LocalDateTime?
 )

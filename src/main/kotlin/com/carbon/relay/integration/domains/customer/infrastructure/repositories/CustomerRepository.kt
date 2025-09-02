@@ -1,6 +1,6 @@
 package com.carbon.relay.integration.domains.customer.infrastructure.repositories
 import com.carbon.relay.integration.domains.customer.infrastructure.entity.CustomerEntity
-import org.springframework.data.r2dbc.repository.R2dbcRepository
+import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 /**
@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository
  * Extends R2dbcRepository to provide reactive CRUD operations.
  */
 @Repository
-interface CustomerRepository : R2dbcRepository<CustomerEntity, Long> {
+interface CustomerRepository : JpaRepository<CustomerEntity, Long> {
 }

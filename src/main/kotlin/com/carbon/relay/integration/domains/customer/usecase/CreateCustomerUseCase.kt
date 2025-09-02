@@ -27,7 +27,7 @@ class CreateCustomerUseCase(
     suspend fun execute(customer: CustomerEntity): Long? {
         logger.info { "Validating customer for create: $customer" }
         CustomerValidation.validateForCreate(customer)
-        val result = customerRepository.save<CustomerEntity>(customer).awaitSingle()
+        val result = customerRepository.save<CustomerEntity>(customer)
 
         // Publish to Kafka
         kafkaTemplate.send("customer", result.id.toString(),
