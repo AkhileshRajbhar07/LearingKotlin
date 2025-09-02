@@ -15,14 +15,22 @@ data class TenantEntity(
     @Id
     @Column("mandant_uuid")
     var mandantUuid: String? = null,
+
+    @Column("name")
+    val name: String? = null,
+
     @Column("street")
-    val street: String?,
+    val street: String? = null,
+
     @Column("zip")
-    val zip: String?,
+    val zip: String? = null,
+
     @Column("city")
-    val city: String?,
+    val city: String? = null,
+
     @Column("created_at")
-    val createdAt: LocalDateTime?,
+    val createdAt: LocalDateTime? = null,
+
     @Column("updated_at")
-    val updatedAt: LocalDateTime?
+    val updatedAt: LocalDateTime? = null
 )

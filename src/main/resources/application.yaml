@@ -31,13 +31,13 @@ spring:
     consumer:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      group-id: domain_event.mandant-created-group
+      group-id: domain_event.mandant_created_group
       enable-auto-commit: false
-      max-poll-records: 500
+      max-poll-records: 2
     listener:
       type: batch
       ack-mode: manual
-      poll-timeout: 5000 # waits up to 5 second per poll
+      poll-timeout: 30000 # waits up to 30 second per poll
     properties:
       security.protocol: PLAINTEXT
 

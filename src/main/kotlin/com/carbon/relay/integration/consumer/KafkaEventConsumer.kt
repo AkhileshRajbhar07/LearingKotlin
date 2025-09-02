@@ -4,6 +4,7 @@ import com.carbon.relay.integration.domains.company.usecase.CompanyService
 import com.carbon.relay.integration.domains.connectors.usecase.ConnectorsService
 import com.carbon.relay.integration.domains.station.usecase.StationService
 import com.carbon.relay.integration.domains.tenant.usecase.TenantService
+import com.carbon.relay.integration.utils.ObjectSizeUtil
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.annotation.KafkaListener
@@ -32,7 +33,7 @@ class KafkaEventConsumer(
             logger.error("Received null message for cp-manually-registered event")
             return
         }
-        stationService.createChargerStation(message)
+//        stationService.createChargerStation(message)
     }
 
     @KafkaListener(
@@ -80,7 +81,11 @@ class KafkaEventConsumer(
         groupId = "\${kafka.groups.mandant-created}"
     )
     suspend fun consumeMandantCreated(records: List<ConsumerRecord<String, String>>, ack: Acknowledgment) {
-        tenantService.createTenant(records,ack)
+
+        logger.debug(
+            "Kafka payload received for mandant-created event: recordCount=${records.size}"
+        )
+        tenantService.createTenant(records, ack)
     }
 
     @KafkaListener(
@@ -94,7 +99,7 @@ class KafkaEventConsumer(
             logger.error("Received null message for company-created event")
             return
         }
-        companyService.createCompany(message)
+//        companyService.createCompany(message)
     }
 
     @KafkaListener(
